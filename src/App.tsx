@@ -18,6 +18,7 @@ export function App() {
     let taskForTodolist = tasks
     if (filter === 'active') {
         taskForTodolist = tasks.filter(e => !e.isDone)
+
     }
     if (filter === 'complited') {
         taskForTodolist = tasks.filter(e => e.isDone)
@@ -37,6 +38,9 @@ export function App() {
         let newTask = [task, ...tasks]
         setTask(newTask)
     }
+    let changeTaskStatus = (id: string, isDone: boolean) => {
+        setTask(tasks.map(e => e.id === id ? {...e, isDone: isDone} : e))
+    }
 
 
     return (
@@ -47,6 +51,8 @@ export function App() {
                 removeTask={remuveTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                changeTaskStatus={changeTaskStatus}
+                filter={filter}
             />
 
         </div>

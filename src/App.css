@@ -1,6 +1,21 @@
 .App {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.error {
+    border: red 1px solid;
+}
+
+.error-message {
+    color: red;
+}
+
+.active-filter {
+    background-color: aquamarine;
+}
+
+.is-done {
+    opacity: 0.5;
+}
