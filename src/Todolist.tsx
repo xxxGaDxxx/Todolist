@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 import {FilterType} from './App';
 
 
-type TaskType = {
+export type TaskType = {
     id: string
     title: string
     isDone: boolean
@@ -11,11 +11,13 @@ type TaskType = {
 type PropsType = {
     title: string
     tasks: TaskType[]
-    removeTask: (id: string) => void
-    changeFilter: (value: FilterType) => void
-    addTask: (title: string) => void
-    changeTaskStatus: (id: string, isDone: boolean) => void
+    removeTask: (todolistId: string, id: string) => void
+    changeFilter: (todolistId: string, value: FilterType) => void
+    addTask: (todolistId: string, title: string) => void
+    changeTaskStatus: (todolistId: string, id: string, isDone: boolean) => void
     filter: FilterType
+    todolistId: string
+    removeTodolist: (todolistId: string) => void
 }
 
 export const Todolist: React.FC<PropsType> = (props) => {
@@ -33,19 +35,27 @@ export const Todolist: React.FC<PropsType> = (props) => {
     }
     let onClickHandler = () => {
         if (title.trim() !== '') {
-            props.addTask(title.trim())
+            props.addTask(props.todolistId, title.trim())
             setTitle('')
         } else {
             setError('Title is reqired')
         }
     }
-    let onClickAll = () => props.changeFilter('all')
-    let onClickActive = () => props.changeFilter('active')
-    let onClickComplited = () => props.changeFilter('complited')
+    let onClickAll = () => props.changeFilter(props.todolistId, 'all')
+    let onClickActive = () => props.changeFilter(props.todolistId, 'active')
+    let onClickComplited = () => props.changeFilter(props.todolistId, 'complited')
+
+    let removeTodolistHandler = () => {
+        props.removeTodolist(props.todolistId)
+    }
 
     return (
         <div>
-            <h3>{props.title}</h3>
+            <h3>
+                {props.title}
+                <button onClick={removeTodolistHandler}>x</button>
+            </h3>
+
             <div>
                 <input value={title} onChange={onChangeHandler} onKeyDown={onKeyDownHandler}
                        className={error ? 'error' : ''}/>
@@ -55,9 +65,9 @@ export const Todolist: React.FC<PropsType> = (props) => {
             <ul>
                 {
                     props.tasks.map(t => {
-                        let onClickHandler = () => props.removeTask(t.id)
+                        let onClickHandler = () => props.removeTask(props.todolistId, t.id)
                         let onChangeCheckbox = () => {
-                            props.changeTaskStatus(t.id, !t.isDone)
+                            props.changeTaskStatus(props.todolistId, t.id, !t.isDone)
                         }
 
                         return (
