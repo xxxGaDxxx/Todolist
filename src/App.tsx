@@ -3,6 +3,8 @@ import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
 import AddItemForm from './components/AddItemForm';
+import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from '@mui/material';
+import {Menu} from '@mui/icons-material';
 
 export type FilterType = 'all' | 'active' | 'complited'
 type TodolistsType = {
@@ -80,41 +82,57 @@ export function App() {
 
     return (
         <div className="App">
-            <AddItemForm callBack={addNewTask}/>
-            {
-                todolists.map((el) => {
-                    let taskForTodolist = tasks[el.id]
-                    if (el.filter === 'active') {
-                        taskForTodolist = tasks[el.id].filter(e => !e.isDone)
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
+                        <Menu/>
+                    </IconButton>
+                    <Typography variant="h6">
+                        News
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+            <Container fixed>
+                <Grid container style={{padding:'20px'}}>
+                    <AddItemForm callBack={addNewTask}/>
+                </Grid>
+                <Grid container spacing={5}>
+                    {
+                        todolists.map((el) => {
+                            let taskForTodolist = tasks[el.id]
+                            if (el.filter === 'active') {
+                                taskForTodolist = tasks[el.id].filter(e => !e.isDone)
 
+                            }
+                            if (el.filter === 'complited') {
+                                taskForTodolist = tasks[el.id].filter(e => e.isDone)
+                            }
+
+                            return (
+                                <Grid item>
+                                    <Paper style={{padding:'10px'}} elevation={3}>
+                                        <Todolist
+                                            key={el.id}
+                                            todolistId={el.id}
+                                            title={el.title}
+                                            tasks={taskForTodolist}
+                                            removeTask={remuveTask}
+                                            changeFilter={changeFilter}
+                                            addTask={addTask}
+                                            changeTaskStatus={changeTaskStatus}
+                                            filter={el.filter}
+                                            removeTodolist={removeTodolist}
+                                            editTodolistHandler={editTodolistHandler}
+                                            editTask={editTask}
+                                        />
+                                    </Paper>
+                                </Grid>
+                            )
+                        })
                     }
-                    if (el.filter === 'complited') {
-                        taskForTodolist = tasks[el.id].filter(e => e.isDone)
-                    }
-
-                    return (
-                        <div className={'app'}
-                             key={el.id}
-                        >
-                            <Todolist
-                                todolistId={el.id}
-                                title={el.title}
-                                tasks={taskForTodolist}
-                                removeTask={remuveTask}
-                                changeFilter={changeFilter}
-                                addTask={addTask}
-                                changeTaskStatus={changeTaskStatus}
-                                filter={el.filter}
-                                removeTodolist={removeTodolist}
-                                editTodolistHandler={editTodolistHandler}
-                                editTask={editTask}
-                            />
-                        </div>
-                    )
-                })
-            }
-
-
+                </Grid>
+            </Container>
         </div>
     );
 }

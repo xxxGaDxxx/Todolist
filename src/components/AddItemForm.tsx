@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from '@mui/material';
+import {AddCircle} from '@mui/icons-material';
 
 type AddItemFormPropsType = {
     callBack: (title: string) => void
@@ -27,10 +29,19 @@ const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
     }
     return (
         <div>
-            <input value={title} onChange={onChangeHandler} onKeyDown={onKeyDownHandler}
-                   className={error ? 'error' : ''}/>
-            <button onClick={onClickHandler}>+</button>
-            {error && <div className={'error-message'}>{error}</div>}
+            <TextField
+                variant="outlined"
+                label="Type value"
+                value={title}
+                onChange={onChangeHandler}
+                onKeyDown={onKeyDownHandler}
+                error={!!error}
+                helperText={error}
+            />
+            {/*<Button onClick={onClickHandler} variant={'contained'} color={'primary'}>+</Button>*/}
+            <IconButton onClick={onClickHandler} color={'primary'}>
+                <AddCircle/>
+            </IconButton>
         </div>
     );
 };

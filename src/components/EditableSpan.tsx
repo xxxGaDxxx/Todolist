@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
+import {TextField} from '@mui/material';
 
 type EditableSpanPropsType = {
     title: string
@@ -6,31 +7,30 @@ type EditableSpanPropsType = {
 }
 
 export const EditableSpan: React.FC<EditableSpanPropsType> = (props) => {
+    const [edit, setEdit] = useState(false)
     let [newTitle, seNewtTitle] = useState(props.title)
 
     let onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         seNewtTitle(e.currentTarget.value)
     }
-
-    let addTask = () => {
-        if (newTitle.trim() !== '') {
-            props.callBack(newTitle.trim())
-        }
+    const onBlurHandler = () => {
+        setEdit(false)
+        props.callBack(newTitle)
     }
 
 
-    const [edit, setEdit] = useState(false)
     let EditTrueHandler = () => {
-        setEdit(!edit)
-        addTask()
+        setEdit(true)
+        seNewtTitle(props.title)
     }
 
     return (
         edit
-            ? <input
+            ? <TextField
+                variant="standard"
                 type="text"
                 value={newTitle}
-                onBlur={EditTrueHandler}
+                onBlur={onBlurHandler}
                 autoFocus
                 onChange={onChangeHandler}
             />

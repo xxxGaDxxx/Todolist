@@ -1,8 +1,9 @@
 import React from 'react';
 import {FilterType} from './App';
-import {Button} from '@mui/material';
+import {Button, Checkbox, IconButton} from '@mui/material';
 import AddItemForm from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
+import {Delete} from '@mui/icons-material';
 
 
 export type TaskType = {
@@ -26,26 +27,7 @@ type PropsType = {
 }
 
 export const Todolist: React.FC<PropsType> = (props) => {
-    /*  let [title, setTitle] = useState('')
-      let [error, setError] = useState<string | null>(null)
 
-      let onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-          setTitle(e.currentTarget.value)
-      }
-      let onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-          setError(null)
-          if (e.key === 'Enter') {
-              onClickHandler()
-          }
-      }
-      let onClickHandler = () => {
-          if (title.trim() !== '') {
-              props.addTask(props.todolistId, title.trim())
-              setTitle('')
-          } else {
-              setError('Title is reqired')
-          }
-      }*/
     let onClickAll = () => props.changeFilter(props.todolistId, 'all')
     let onClickActive = () => props.changeFilter(props.todolistId, 'active')
     let onClickComplited = () => props.changeFilter(props.todolistId, 'complited')
@@ -68,16 +50,12 @@ export const Todolist: React.FC<PropsType> = (props) => {
         <div>
             <h3>
                 <EditableSpan title={props.title} callBack={addEditableHandler}/>
-                {/*{props.title}*/}
-                <Button variant="outlined" onClick={removeTodolistHandler}>x</Button>
+                <IconButton onClick={removeTodolistHandler}>
+                    <Delete/>
+                </IconButton>
             </h3>
             <AddItemForm callBack={addTaskHandler}/>
-            {/*<div>
-                <input value={title} onChange={onChangeHandler} onKeyDown={onKeyDownHandler}
-                       className={error ? 'error' : ''}/>
-                <button onClick={onClickHandler}>+</button>
-                {error && <div className={'error-message'}>{error}</div>}
-            </div>*/}
+
             <ul>
                 {
                     props.tasks.map(t => {
@@ -88,25 +66,28 @@ export const Todolist: React.FC<PropsType> = (props) => {
 
 
                         return (
-                            <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                                <input type="checkbox" checked={t.isDone} onChange={onChangeCheckbox}/>
+                            <div key={t.id} className={t.isDone ? 'is-done' : ''}>
+                                <Checkbox color={'error'} checked={t.isDone} onChange={onChangeCheckbox}/>
                                 <EditableSpan title={t.title}
                                               callBack={(newTitle) => addEditableTask(t.id, newTitle)}/> {/*//появился промежуточный ему приходит и от отдаёт уже 2 аргумента */}
-                                {/*<span>{t.title}</span>*/}
-                                <button onClick={onClickHandler}>x</button>
-                            </li>
+
+                                <IconButton onClick={onClickHandler}>
+                                    <Delete/>
+                                </IconButton>
+                            </div>
                         )
                     })
                 }
 
             </ul>
             <div>
-                <button className={props.filter === 'all' ? 'active-filter' : ''} onClick={onClickAll}>All</button>
-                <button className={props.filter === 'active' ? 'active-filter' : ''} onClick={onClickActive}>Active
-                </button>
-                <button className={props.filter === 'complited' ? 'active-filter' : ''}
+                <Button color={'primary'} variant={props.filter === 'all' ? 'contained' : 'outlined'}
+                        onClick={onClickAll}>All</Button>
+                <Button color={'success'} variant={props.filter === 'active' ? 'contained' : 'outlined'}
+                        onClick={onClickActive}>Active</Button>
+                <Button color={'error'} variant={props.filter === 'complited' ? 'contained' : 'outlined'}
                         onClick={onClickComplited}>Complited
-                </button>
+                </Button>
             </div>
         </div>
     )
