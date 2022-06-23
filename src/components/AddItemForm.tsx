@@ -38,7 +38,6 @@ const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
                 error={!!error}
                 helperText={error}
             />
-            {/*<Button onClick={onClickHandler} variant={'contained'} color={'primary'}>+</Button>*/}
             <IconButton onClick={onClickHandler} color={'primary'}>
                 <AddCircle/>
             </IconButton>

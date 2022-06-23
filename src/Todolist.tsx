@@ -30,7 +30,7 @@ export const Todolist: React.FC<PropsType> = (props) => {
 
     let onClickAll = () => props.changeFilter(props.todolistId, 'all')
     let onClickActive = () => props.changeFilter(props.todolistId, 'active')
-    let onClickComplited = () => props.changeFilter(props.todolistId, 'complited')
+    let onClickComplited = () => props.changeFilter(props.todolistId, 'completed')
 
     let removeTodolistHandler = () => {
         props.removeTodolist(props.todolistId)
@@ -85,7 +85,7 @@ export const Todolist: React.FC<PropsType> = (props) => {
                         onClick={onClickAll}>All</Button>
                 <Button color={'success'} variant={props.filter === 'active' ? 'contained' : 'outlined'}
                         onClick={onClickActive}>Active</Button>
-                <Button color={'error'} variant={props.filter === 'complited' ? 'contained' : 'outlined'}
+                <Button color={'error'} variant={props.filter === 'completed' ? 'contained' : 'outlined'}
                         onClick={onClickComplited}>Complited
                 </Button>
             </div>

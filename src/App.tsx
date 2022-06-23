@@ -6,13 +6,13 @@ import AddItemForm from './components/AddItemForm';
 import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from '@mui/material';
 import {Menu} from '@mui/icons-material';
 
-export type FilterType = 'all' | 'active' | 'complited'
-type TodolistsType = {
+export type FilterType = 'all' | 'active' | 'completed'
+export type  TodolistsType = {
     id: string
     title: string
     filter: FilterType
 }
-type TaskPropsType = {
+export type TaskPropsType = {
     [key: string]: TaskType[]
 }
 
@@ -41,8 +41,8 @@ export function App() {
     })
 
 
-    let changeFilter = (todolistId: string, value: FilterType) => {
-        setTodolists(todolists.map(t => t.id === todolistId ? {...t, filter: value} : t))
+    let changeFilter = (todolistId: string, filter: FilterType) => {
+        setTodolists(todolists.map(t => t.id === todolistId ? {...t, filter: filter} : t))
 
     }
 
@@ -56,6 +56,7 @@ export function App() {
         setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
 
     }
+
     let changeTaskStatus = (todolistId: string, id: string, isDone: boolean) => {
         setTasks({...tasks, [todolistId]: tasks[todolistId].map(e => e.id === id ? {...e, isDone: isDone} : e)})
     }
@@ -66,15 +67,17 @@ export function App() {
         console.log(tasks)
     }
 
-    let addNewTask = (title: string) => {
+    let addNewTodolist = (title: string) => {
         let newId = v1()
         let newTask: TodolistsType = {id: newId, title: title, filter: 'all'}
         setTodolists([newTask, ...todolists])
         setTasks({...tasks, [newId]: []})
     }
+
     const editTodolistHandler = (todolistId: string, newTitle: string) => {
         setTodolists(todolists.map(t => t.id === todolistId ? {...t, title: newTitle} : t))
     }
+
     const editTask = (todolistId: string, taskID: string, newTitle: string) => {
         setTasks({...tasks, [todolistId]: tasks[todolistId].map(e => e.id === taskID ? {...e, title: newTitle} : e)})
     }
@@ -94,8 +97,8 @@ export function App() {
                 </Toolbar>
             </AppBar>
             <Container fixed>
-                <Grid container style={{padding:'20px'}}>
-                    <AddItemForm callBack={addNewTask}/>
+                <Grid container style={{padding: '20px'}}>
+                    <AddItemForm callBack={addNewTodolist}/>
                 </Grid>
                 <Grid container spacing={5}>
                     {
@@ -105,13 +108,13 @@ export function App() {
                                 taskForTodolist = tasks[el.id].filter(e => !e.isDone)
 
                             }
-                            if (el.filter === 'complited') {
+                            if (el.filter === 'completed') {
                                 taskForTodolist = tasks[el.id].filter(e => e.isDone)
                             }
 
                             return (
                                 <Grid item>
-                                    <Paper style={{padding:'10px'}} elevation={3}>
+                                    <Paper style={{padding: '10px'}} elevation={3}>
                                         <Todolist
                                             key={el.id}
                                             todolistId={el.id}
