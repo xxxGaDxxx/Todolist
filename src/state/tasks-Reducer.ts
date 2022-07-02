@@ -1,9 +1,15 @@
-import {TaskPropsType} from '../App';
 import {v1} from 'uuid';
-import {AddNewTodolistACType, RemoveTodolistACType} from './todolists-Reducer';
+import {AddNewTodolistACType, RemoveTodolistACType} from './todolist-reducer';
+import {TaskType} from '../Todolist';
+
+export type TaskPropsType = {
+    [key: string]: TaskType[]
+}
+
+let initialProfileState: TaskPropsType = {}
 
 
-export const tasksReducer = (state: TaskPropsType, action: TaskReducerType): TaskPropsType => {
+export const tasksReducer = (state = initialProfileState, action: TaskReducerType): TaskPropsType => {
     switch (action.type) {
         case 'REMOVE-TASK':
             return {
@@ -42,7 +48,7 @@ export const tasksReducer = (state: TaskPropsType, action: TaskReducerType): Tas
             delete copyState[action.id]
             return copyState
         default:
-            throw new Error('I don\'t understand this type')
+            return state
     }
 }
 
@@ -56,7 +62,7 @@ type TaskReducerType =
 
 type RemoveTaskACReducerType = ReturnType<typeof removeTaskAC>
 
-export const removeTaskAC = (taskId: string, todolistId: string) => {
+export const removeTaskAC = (todolistId: string, taskId: string) => {
     return {
         type: 'REMOVE-TASK',
         taskId,
@@ -66,7 +72,7 @@ export const removeTaskAC = (taskId: string, todolistId: string) => {
 
 type AddTaskACReducerType = ReturnType<typeof addTaskAC>
 
-export const addTaskAC = (title: string, todolistId: string) => {
+export const addTaskAC = (todolistId: string, title: string) => {
     return {
         type: 'ADD-TASK',
         title,
@@ -76,7 +82,7 @@ export const addTaskAC = (title: string, todolistId: string) => {
 
 type ChangeTaskStatusACReducerType = ReturnType<typeof changeTaskStatusAC>
 
-export const changeTaskStatusAC = (taskId: string, isDone: boolean, todolistId: string) => {
+export const changeTaskStatusAC = (todolistId: string, taskId: string, isDone: boolean) => {
     return {
         type: 'CHANGE-STATUS-TASK',
         taskId,
@@ -88,7 +94,7 @@ export const changeTaskStatusAC = (taskId: string, isDone: boolean, todolistId: 
 
 type ChangeTaskTitleACReducerType = ReturnType<typeof changeTaskTitleAC>
 
-export const changeTaskTitleAC = (taskId: string, title: string, todolistId: string) => {
+export const changeTaskTitleAC = (todolistId: string, taskId: string, title: string) => {
     return {
         type: 'CHANGE-TITLE-TASK',
         taskId,
