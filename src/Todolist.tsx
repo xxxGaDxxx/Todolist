@@ -1,9 +1,12 @@
 import React from 'react';
-import {FilterType} from './App';
 import {Button, Checkbox, IconButton} from '@mui/material';
 import AddItemForm from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
 import {Delete} from '@mui/icons-material';
+import {changeFilterAC, editTodolistTitleAC, removeTodolistAC, TodolistsType} from './state/todolist-reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from './state/store';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/tasks-Reducer';
 
 
 export type TaskType = {
@@ -13,43 +16,45 @@ export type TaskType = {
 }
 
 type PropsType = {
-    title: string
-    tasks: TaskType[]
-    removeTask: (todolistId: string, id: string) => void
-    changeFilter: (todolistId: string, value: FilterType) => void
-    addTask: (todolistId: string, title: string) => void
-    changeTaskStatus: (todolistId: string, id: string, isDone: boolean) => void
-    filter: FilterType
-    todolistId: string
-    removeTodolist: (todolistId: string) => void
-    editTodolistHandler: (todolistId: string, title: string) => void
-    editTask: (todolistId: string, taskID: string, newTitle: string) => void
+    todolist: TodolistsType
 }
 
-export const Todolist: React.FC<PropsType> = (props) => {
+export const Todolist = ({todolist}: PropsType) => {
 
-    let onClickAll = () => props.changeFilter(props.todolistId, 'all')
-    let onClickActive = () => props.changeFilter(props.todolistId, 'active')
-    let onClickComplited = () => props.changeFilter(props.todolistId, 'completed')
+
+    const {id, title, filter} = {...todolist}
+    let tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
+
+    const dispatch = useDispatch()
+
+    let onClickAll = () => dispatch(changeFilterAC(id, 'all'))
+    let onClickActive = () => dispatch(changeFilterAC(id, 'active'))
+    let onClickComplited = () => dispatch(changeFilterAC(id, 'completed'))
+
+    if (filter === 'active') {
+        tasks = tasks.filter(e => !e.isDone)
+    }
+    if (filter === 'completed') {
+        tasks = tasks.filter(e => e.isDone)
+    }
+
 
     let removeTodolistHandler = () => {
-        props.removeTodolist(props.todolistId)
+        let action = removeTodolistAC(id)
+        dispatch(action)
     }
 
     let addTaskHandler = (title: string) => {
-        props.addTask(props.todolistId, title)
+        dispatch(addTaskAC(id, title))
     }
     let addEditableHandler = (newTitle: string) => {
-        props.editTodolistHandler(props.todolistId, newTitle)
-    }
-    let addEditableTask = (taskID: string, newTitle: string) => {
-        props.editTask(props.todolistId, taskID, newTitle)
+        dispatch(editTodolistTitleAC(id, newTitle))
     }
 
     return (
         <div>
             <h3>
-                <EditableSpan title={props.title} callBack={addEditableHandler}/>
+                <EditableSpan title={title} callBack={addEditableHandler}/>
                 <IconButton onClick={removeTodolistHandler}>
                     <Delete/>
                 </IconButton>
@@ -58,10 +63,15 @@ export const Todolist: React.FC<PropsType> = (props) => {
 
             <ul>
                 {
-                    props.tasks.map(t => {
-                        let onClickHandler = () => props.removeTask(props.todolistId, t.id)
+                    tasks.map(t => {
+                        let onClickHandler = () => {
+                            dispatch(removeTaskAC(id, t.id))
+                        }
                         let onChangeCheckbox = () => {
-                            props.changeTaskStatus(props.todolistId, t.id, !t.isDone)
+                            dispatch(changeTaskStatusAC(id, t.id, !t.isDone))
+                        }
+                        let onChangeTitle = (newTitle: string) => {
+                            dispatch(changeTaskTitleAC(id, t.id, newTitle))
                         }
 
 
@@ -69,7 +79,7 @@ export const Todolist: React.FC<PropsType> = (props) => {
                             <div key={t.id} className={t.isDone ? 'is-done' : ''}>
                                 <Checkbox color={'error'} checked={t.isDone} onChange={onChangeCheckbox}/>
                                 <EditableSpan title={t.title}
-                                              callBack={(newTitle) => addEditableTask(t.id, newTitle)}/> {/*//появился промежуточный ему приходит и от отдаёт уже 2 аргумента */}
+                                              callBack={onChangeTitle}/> {/*//появился промежуточный ему приходит и от отдаёт уже 2 аргумента */}
 
                                 <IconButton onClick={onClickHandler}>
                                     <Delete/>
@@ -81,11 +91,11 @@ export const Todolist: React.FC<PropsType> = (props) => {
 
             </ul>
             <div>
-                <Button color={'primary'} variant={props.filter === 'all' ? 'contained' : 'outlined'}
+                <Button color={'primary'} variant={filter === 'all' ? 'contained' : 'outlined'}
                         onClick={onClickAll}>All</Button>
-                <Button color={'success'} variant={props.filter === 'active' ? 'contained' : 'outlined'}
+                <Button color={'success'} variant={filter === 'active' ? 'contained' : 'outlined'}
                         onClick={onClickActive}>Active</Button>
-                <Button color={'error'} variant={props.filter === 'completed' ? 'contained' : 'outlined'}
+                <Button color={'error'} variant={filter === 'completed' ? 'contained' : 'outlined'}
                         onClick={onClickComplited}>Complited
                 </Button>
             </div>

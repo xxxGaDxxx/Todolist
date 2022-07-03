@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
 import './App.css';
-import {TaskType, Todolist} from './Todolist';
+import {TaskType} from './Todolist';
 import {v1} from 'uuid';
 import AddItemForm from './components/AddItemForm';
 import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from '@mui/material';
@@ -13,6 +13,7 @@ import {
     todolistReducer
 } from './state/todolist-reducer';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './state/tasks-Reducer';
+import {Todolist1} from './Todolist1';
 
 export type FilterType = 'all' | 'active' | 'completed'
 export type  TodolistsType = {
@@ -115,7 +116,7 @@ export function AppWithReducers() {
                             return (
                                 <Grid item>
                                     <Paper style={{padding: '10px'}} elevation={3}>
-                                        <Todolist
+                                        <Todolist1
                                             key={el.id}
                                             todolistId={el.id}
                                             title={el.title}
