@@ -1,5 +1,6 @@
-import {FilterType} from '../App';
+
 import {v1} from 'uuid';
+import {FilterType} from '../AppWithRedux';
 
 export type  TodolistsType = {
     id: string
@@ -10,6 +11,7 @@ export type  TodolistsType = {
 let initialProfileState: TodolistsType[] = []
 
 export const todolistReducer = (state = initialProfileState, action: ActionTodolistsReducerType): TodolistsType[] => {
+
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
             /*let removeTodolist = (todolistId: string) => {
@@ -20,6 +22,7 @@ export const todolistReducer = (state = initialProfileState, action: ActionTodol
             return state.filter(t => t.id !== action.id)
         }
         case 'ADD-TODOLIST': {
+
             /*let addNewTodolist = (title: string) => {
                 let newId = v1()
                 let newTask: TodolistsType = {id: newId, title: title, filter: 'all'}

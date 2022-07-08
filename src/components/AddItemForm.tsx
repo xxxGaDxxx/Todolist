@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import {IconButton, TextField} from '@mui/material';
 import {AddCircle} from '@mui/icons-material';
 
@@ -6,7 +6,7 @@ type AddItemFormPropsType = {
     callBack: (title: string) => void
 }
 
-const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
+export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
 
@@ -14,10 +14,16 @@ const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
         setTitle(e.currentTarget.value)
     }
     let onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+
+        if(error) setError(null)
+
         if (e.key === 'Enter') {
             onClickHandler()
         }
+        // setError(null)
+        // if (e.key === 'Enter') {
+        //     onClickHandler()
+        // }
     }
     let onClickHandler = () => {
         if (title.trim() !== '') {
@@ -43,6 +49,5 @@ const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
             </IconButton>
         </div>
     );
-};
+});
 
-export default AddItemForm;

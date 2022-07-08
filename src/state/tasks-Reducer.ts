@@ -23,6 +23,7 @@ export const tasksReducer = (state = initialProfileState, action: TaskReducerTyp
                 [action.todolistId]: [newTask, ...state[action.todolistId]]
             }
         case 'CHANGE-STATUS-TASK':
+            debugger
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId].map(t => t.id === action.taskId ? {
@@ -85,9 +86,9 @@ type ChangeTaskStatusACReducerType = ReturnType<typeof changeTaskStatusAC>
 export const changeTaskStatusAC = (todolistId: string, taskId: string, isDone: boolean) => {
     return {
         type: 'CHANGE-STATUS-TASK',
+        todolistId,
         taskId,
         isDone,
-        todolistId,
     } as const
 }
 

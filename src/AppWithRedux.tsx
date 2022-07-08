@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
-import AddItemForm from './components/AddItemForm';
+import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from '@mui/material';
 import {Menu} from '@mui/icons-material';
 import {
@@ -11,16 +11,18 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
 
+export type FilterType = 'all' | 'active' | 'completed'
+
 export function AppWithRedux() {
     const todolists = useSelector<AppRootStateType, TodolistsType[]>(state => state.todolists)
 
     const dispatch = useDispatch()
 
 
-    let addNewTodolist = (title: string) => {
+    let addNewTodolist = useCallback((title: string) => {
         let action = addNewTodolistAC(title)
         dispatch(action)
-    }
+    },[dispatch])
 
     return (
         <div className="App">
