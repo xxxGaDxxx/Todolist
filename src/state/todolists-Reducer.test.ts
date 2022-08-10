@@ -3,7 +3,7 @@ import {
     changeFilterAC,
     editTodolistTitleAC,
     removeTodolistAC,
-    todolistReducer, TodolistsType
+    todolistReducer, TodoListsType
 } from './todolist-reducer'
 import {v1} from 'uuid'
 import {FilterType} from '../AppWithRedux';
@@ -12,7 +12,7 @@ import {FilterType} from '../AppWithRedux';
 
 let todolistID_1: string
 let todolistID_2: string
-let startState: TodolistsType[]
+let startState: TodoListsType[]
 
 beforeEach(() => {
     todolistID_1 = v1()

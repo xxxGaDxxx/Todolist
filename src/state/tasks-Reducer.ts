@@ -23,7 +23,7 @@ export const tasksReducer = (state = initialProfileState, action: TaskReducerTyp
                 [action.todolistId]: [newTask, ...state[action.todolistId]]
             }
         case 'CHANGE-STATUS-TASK':
-            debugger
+
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId].map(t => t.id === action.taskId ? {
@@ -48,6 +48,7 @@ export const tasksReducer = (state = initialProfileState, action: TaskReducerTyp
             const copyState = {...state}
             delete copyState[action.id]
             return copyState
+
         default:
             return state
     }

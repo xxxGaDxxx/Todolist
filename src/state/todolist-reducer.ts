@@ -1,43 +1,28 @@
-
 import {v1} from 'uuid';
 import {FilterType} from '../AppWithRedux';
 
-export type  TodolistsType = {
+export type  TodoListsType = {
     id: string
     title: string
     filter: FilterType
 }
 
-let initialProfileState: TodolistsType[] = []
+let initialProfileState: TodoListsType[] = []
 
-export const todolistReducer = (state = initialProfileState, action: ActionTodolistsReducerType): TodolistsType[] => {
+export const todolistReducer = (state = initialProfileState, action: ActionTodoListsReducerType): TodoListsType[] => {
 
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
-            /*let removeTodolist = (todolistId: string) => {
-                setTodolists(todolists.filter(e => e.id !== todolistId))
-                delete tasks[todolistId]
-                console.log(tasks)
-            }*/
             return state.filter(t => t.id !== action.id)
         }
         case 'ADD-TODOLIST': {
-
-            /*let addNewTodolist = (title: string) => {
-                let newId = v1()
-                let newTask: TodolistsType = {id: newId, title: title, filter: 'all'}
-                setTodolists([newTask, ...todolists])
-                setTasks({...tasks, [newId]: []})
-            }*/
-            let newTask: TodolistsType = {id: action.todolistId, title: action.title, filter: 'all'}
+            let newTask: TodoListsType = {id: action.todolistId, title: action.title, filter: 'all'}
             return [newTask, ...state]
         }
         case 'CHANGE-TODOLIST-TITLE': {
-            /*setTodolists(todolists.map(t => t.id === todolistId ? {...t, title: newTitle} : t))*/
             return state.map(t => t.id === action.id ? {...t, title: action.title} : t)
         }
         case 'CHANGE-TODOLIST-FILTER': {
-            /*setTodolists(todolists.map(t => t.id === todolistId ? {...t, filter: filter} : t))*/
             return state.map(t => t.id === action.id ? {...t, filter: action.filter} : t)
         }
         default:
@@ -46,7 +31,7 @@ export const todolistReducer = (state = initialProfileState, action: ActionTodol
 }
 
 
-export type ActionTodolistsReducerType =
+export type ActionTodoListsReducerType =
     RemoveTodolistACType
     | AddNewTodolistACType
     | EditTodolistHandlerACType

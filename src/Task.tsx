@@ -25,13 +25,13 @@ export const Task = memo(({task, todolistId}: TaskPropsType) => {
     }
     let onChangeTitle = useCallback((newTitle: string) => {
         dispatch(changeTaskTitleAC(todolistId,id, newTitle))
-    },[dispatch,id])
+    },[dispatch,todolistId,id])
 
     return (
         <div key={id} className={isDone ? 'is-done' : ''}>
             <Checkbox color={'error'} checked={isDone} onChange={onChangeCheckbox}/>
             <EditableSpan title={title}
-                          callBack={onChangeTitle}/> {/*//появился промежуточный ему приходит и от отдаёт уже 2 аргумента */}
+                          callBack={onChangeTitle}/>
 
             <IconButton onClick={onClickHandler}>
                 <Delete/>

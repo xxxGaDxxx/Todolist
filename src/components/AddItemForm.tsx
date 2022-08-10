@@ -7,6 +7,8 @@ type AddItemFormPropsType = {
 }
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
+    // console.log('AddItemForm')
+
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
 
@@ -20,10 +22,6 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
         if (e.key === 'Enter') {
             onClickHandler()
         }
-        // setError(null)
-        // if (e.key === 'Enter') {
-        //     onClickHandler()
-        // }
     }
     let onClickHandler = () => {
         if (title.trim() !== '') {
