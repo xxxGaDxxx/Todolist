@@ -1,22 +1,21 @@
 import {v1} from 'uuid';
 import {FilterType} from '../AppWithRedux';
+import {TodolistType} from '../stories/axios_query/API/todolist_API';
 
-export type  TodoListsType = {
-    id: string
-    title: string
+export type  TodoListsDomainType = TodolistType & {
     filter: FilterType
 }
 
-let initialProfileState: TodoListsType[] = []
+let initialProfileState: TodoListsDomainType[] = []
 
-export const todolistReducer = (state = initialProfileState, action: ActionTodoListsReducerType): TodoListsType[] => {
+export const todolistReducer = (state = initialProfileState, action: ActionTodoListsReducerType): TodoListsDomainType[] => {
 
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
             return state.filter(t => t.id !== action.id)
         }
         case 'ADD-TODOLIST': {
-            let newTask: TodoListsType = {id: action.todolistId, title: action.title, filter: 'all'}
+            let newTask: TodoListsDomainType = {id: action.todolistId, title: action.title, filter: 'all',addedDate:'', order:0}
             return [newTask, ...state]
         }
         case 'CHANGE-TODOLIST-TITLE': {

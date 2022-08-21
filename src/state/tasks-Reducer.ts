@@ -1,6 +1,7 @@
 import {v1} from 'uuid';
 import {AddNewTodolistACType, RemoveTodolistACType} from './todolist-reducer';
-import {TaskType} from '../Todolist';
+import {TaskPriorities, TaskStatuses, TaskType} from '../stories/axios_query/API/todolist_API';
+
 
 export type TaskPropsType = {
     [key: string]: TaskType[]
@@ -17,7 +18,7 @@ export const tasksReducer = (state = initialProfileState, action: TaskReducerTyp
                 [action.todolistId]: state[action.todolistId].filter(t => t.id !== action.taskId)
             }
         case 'ADD-TASK':
-            let newTask = {id: v1(), title: action.title, isDone: false}
+            let newTask:TaskType = {id: v1(), title: action.title, status:TaskStatuses.New,todoListId:action.todolistId,startDate:'',addedDate:'',deadline:'',order:0,priority:TaskPriorities.Low,description:''}
             return {
                 ...state,
                 [action.todolistId]: [newTask, ...state[action.todolistId]]
@@ -28,7 +29,7 @@ export const tasksReducer = (state = initialProfileState, action: TaskReducerTyp
                 ...state,
                 [action.todolistId]: state[action.todolistId].map(t => t.id === action.taskId ? {
                     ...t,
-                    isDone: action.isDone
+                    status:action.status
                 } : t)
             }
         case 'CHANGE-TITLE-TASK':
@@ -84,12 +85,12 @@ export const addTaskAC = (todolistId: string, title: string) => {
 
 type ChangeTaskStatusACReducerType = ReturnType<typeof changeTaskStatusAC>
 
-export const changeTaskStatusAC = (todolistId: string, taskId: string, isDone: boolean) => {
+export const changeTaskStatusAC = (todolistId: string, taskId: string, status:TaskStatuses) => {
     return {
         type: 'CHANGE-STATUS-TASK',
         todolistId,
         taskId,
-        isDone,
+        status,
     } as const
 }
 

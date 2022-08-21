@@ -6,7 +6,7 @@ import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper}
 import {Menu} from '@mui/icons-material';
 import {
     addNewTodolistAC,
-    TodoListsType
+    TodoListsDomainType
 } from './state/todolist-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
@@ -16,7 +16,7 @@ export type FilterType = 'all' | 'active' | 'completed'
 export function AppWithRedux() {
     // console.log('APP')
 
-    const todolists = useSelector<AppRootStateType, TodoListsType[]>(state => state.todolists)
+    const todolists = useSelector<AppRootStateType, TodoListsDomainType[]>(state => state.todolists)
 
     const dispatch = useDispatch()
 

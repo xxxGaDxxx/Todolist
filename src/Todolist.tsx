@@ -3,21 +3,16 @@ import {Button, IconButton} from '@mui/material';
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
 import {Delete} from '@mui/icons-material';
-import {changeFilterAC, editTodolistTitleAC, removeTodolistAC, TodoListsType} from './state/todolist-reducer';
+import {changeFilterAC, editTodolistTitleAC, removeTodolistAC, TodoListsDomainType} from './state/todolist-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
-import {addTaskAC } from './state/tasks-Reducer';
+import {addTaskAC} from './state/tasks-Reducer';
 import {Task} from './Task';
+import {TaskStatuses, TaskType} from './stories/axios_query/API/todolist_API';
 
-
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 
 type PropsType = {
-    todolist: TodoListsType
+    todolist: TodoListsDomainType
 }
 
 export const Todolist = memo(({todolist}: PropsType) => {
@@ -33,25 +28,25 @@ export const Todolist = memo(({todolist}: PropsType) => {
     let onClickComplited = () => dispatch(changeFilterAC(id, 'completed'))
 
     if (filter === 'active') {
-        tasks = tasks.filter(e => !e.isDone)
+        tasks = tasks.filter(e => e.status ===TaskStatuses.New)
     }
     if (filter === 'completed') {
-        tasks = tasks.filter(e => e.isDone)
+        tasks = tasks.filter(e => e.status === TaskStatuses.Completed)
     }
 
 
     let removeTodolistHandler = useCallback(() => {
         let action = removeTodolistAC(id)
         dispatch(action)
-    }, [dispatch,id])
+    }, [dispatch, id])
 
     let addTaskHandler = useCallback((title: string) => {
         dispatch(addTaskAC(id, title))
-    }, [dispatch,id])
+    }, [dispatch, id])
 
     let addEditableHandler = useCallback((newTitle: string) => {
         dispatch(editTodolistTitleAC(id, newTitle))
-    }, [dispatch,id])
+    }, [dispatch, id])
 
     return (
         <div>
@@ -66,32 +61,12 @@ export const Todolist = memo(({todolist}: PropsType) => {
             <ul>
                 {
                     tasks.map(t => {
-                        // let onClickHandler = () => {
-                        //     dispatch(removeTaskAC(id, t.id))
-                        // }
-                        // let onChangeCheckbox = () => {
-                        //     dispatch(changeTaskStatusAC(id, t.id, !t.isDone))
-                        // }
-                        // let onChangeTitle = (newTitle: string) => {
-                        //     dispatch(changeTaskTitleAC(id, t.id, newTitle))
-                        // }
-
-
                         return (
                             <Task
                                 key={t.id}
                                 task={t}
                                 todolistId={id}
                             />
-                            // <div key={t.id} className={t.isDone ? 'is-done' : ''}>
-                            //     <Checkbox color={'error'} checked={t.isDone} onChange={onChangeCheckbox}/>
-                            //     <EditableSpan title={t.title}
-                            //                   callBack={onChangeTitle}/> {/*//появился промежуточный ему приходит и от отдаёт уже 2 аргумента */}
-                            //
-                            //     <IconButton onClick={onClickHandler}>
-                            //         <Delete/>
-                            //     </IconButton>
-                            // </div>
                         )
                     })
                 }
