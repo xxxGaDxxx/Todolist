@@ -7,23 +7,21 @@ type AddItemFormPropsType = {
 }
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
-    // console.log('AddItemForm')
 
-    let [title, setTitle] = useState('')
-    let [error, setError] = useState<string | null>(null)
 
-    let onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const [title, setTitle] = useState('')
+    const [error, setError] = useState<string | null>(null)
+
+    const onChangeValueInput = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
-    let onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-
+    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if(error) setError(null)
-
         if (e.key === 'Enter') {
-            onClickHandler()
+            onClickAddTodoAndTask()
         }
     }
-    let onClickHandler = () => {
+    const onClickAddTodoAndTask = () => {
         if (title.trim() !== '') {
             props.callBack(title.trim())
             setTitle('')
@@ -37,12 +35,12 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
                 variant="outlined"
                 label="Type value"
                 value={title}
-                onChange={onChangeHandler}
+                onChange={onChangeValueInput}
                 onKeyDown={onKeyDownHandler}
                 error={!!error}
                 helperText={error}
             />
-            <IconButton onClick={onClickHandler} color={'primary'}>
+            <IconButton onClick={onClickAddTodoAndTask} color={'primary'}>
                 <AddCircle/>
             </IconButton>
         </div>

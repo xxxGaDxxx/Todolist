@@ -5,8 +5,8 @@ import {
     TaskPropsType,
     tasksReducer
 } from './tasks-Reducer'
-import {addNewTodolistAC, removeTodolistAC} from './todolist-reducer';
-import {TaskStatuses} from '../stories/axios_query/API/todolist_API';
+import {addTodolistAC, deleteTodolistAC} from './todolist-reducer';
+import {TaskStatuses} from '../../api/todolist_API';
 import {v1} from 'uuid';
 
 let startState: TaskPropsType
@@ -243,7 +243,7 @@ test('title of specified task should be changed', () => {
 
 
 test('new array should be added when new todolist is added', () => {
-    const action = addNewTodolistAC({id: v1(), title: 'What to learn', addedDate: '', order: 0})
+    const action = addTodolistAC({id: v1(), title: 'What to learn', addedDate: '', order: 0})
 
     const endState = tasksReducer(startState, action)
 
@@ -260,7 +260,7 @@ test('new array should be added when new todolist is added', () => {
 
 
 test('property with todolistId should be deleted', () => {
-    const action = removeTodolistAC('todolistId2')
+    const action = deleteTodolistAC('todolistId2')
 
     const endState = tasksReducer(startState, action)
 

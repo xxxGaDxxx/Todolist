@@ -7,7 +7,7 @@ describe('addItemForm', () => {
         await page.goto('http://localhost:9009/iframe.html?args=&id=todolist-additemform--add-item-form-story&viewMode=story')
         const image = await page.screenshot()
 
-        // API from jest-image-snapshot
+        // api from jest-image-snapshot
         expect(image).toMatchImageSnapshot()
     })
 })
