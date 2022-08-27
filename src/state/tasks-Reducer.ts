@@ -64,20 +64,21 @@ export const tasksReducer = (state = initialProfileState, action: TaskReducerTyp
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId].map(t => t.id === action.taskId ? {
-                    ...t, status: action.status} : t)
-            }
-        case 'CHANGE-TITLE-TASK':
-            return {
-                ...state,
-                [action.todolistId]: state[action.todolistId].map(t => t.id === action.taskId ? {
-                    ...t,
-                    title: action.title
+                    ...t, ...action.model
                 } : t)
             }
+        // case 'CHANGE-TITLE-TASK':
+        //     return {
+        //         ...state,
+        //         [action.todolistId]: state[action.todolistId].map(t => t.id === action.taskId ? {
+        //             ...t,
+        //             title: action.title
+        //         } : t)
+        //     }
         case 'ADD-TODOLIST':
             return {
                 ...state,
-                [action.todolistId]: []
+                [action.todolist.id]: []
             }
         case 'REMOVE-TODOLIST':
             const copyState = {...state}
@@ -100,7 +101,6 @@ type TaskReducerType =
     RemoveTaskACReducerType
     | AddTaskACReducerType
     | UpdateTaskACPropsType
-    | ChangeTaskTitleACReducerType
     | AddNewTodolistACType
     | RemoveTodolistACType
     | GetTodosACType
@@ -128,26 +128,26 @@ export const addTaskAC = (task: TaskType) => {
 type UpdateTaskACPropsType = ReturnType<typeof updateTaskAC>
 
 
-export const updateTaskAC = (todolistId: string, taskId: string, status: TaskStatuses) => {
+export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateTaskModelType) => {
     return {
         type: 'UPDATE-TASK',
         todolistId,
         taskId,
-        status,
+        model,
     } as const
 }
 
 
-type ChangeTaskTitleACReducerType = ReturnType<typeof changeTaskTitleAC>
+// type ChangeTaskTitleACReducerType = ReturnType<typeof changeTaskTitleAC>
 
-export const changeTaskTitleAC = (todolistId: string, taskId: string, title: string) => {
-    return {
-        type: 'CHANGE-TITLE-TASK',
-        taskId,
-        title,
-        todolistId,
-    } as const
-}
+// export const changeTaskTitleAC = (todolistId: string, taskId: string, title: string) => {
+//     return {
+//         type: 'CHANGE-TITLE-TASK',
+//         taskId,
+//         title,
+//         todolistId,
+//     } as const
+// }
 
 type SetTaskType = ReturnType<typeof setTaskAC>
 
@@ -181,7 +181,7 @@ export const createTaskTC = (todolistId: string, title: string): AppThunk => (di
             dispatch(addTaskAC(res.data.data.item))
         })
 }
-export type UpdateTaskTCType = {
+export type UpdateTaskModelType = {
     title?: string
     description?: string
     status?: TaskStatuses
@@ -190,7 +190,7 @@ export type UpdateTaskTCType = {
     deadline?: string
 }
 
-export const updateTaskTC = (todolistId: string, taskId: string, model: UpdateTaskTCType): AppThunk => (dispatch, getState: () => AppRootStateType) => {
+export const updateTaskTC = (todolistId: string, taskId: string, model: UpdateTaskModelType): AppThunk => (dispatch, getState: () => AppRootStateType) => {
     //достаём таски с getState с нужного тудулиста и при помощи  find  дастаём нужную таску
     const task = getState().tasks[todolistId].find(t => t.id === taskId)
     if (task) {
@@ -206,9 +206,11 @@ export const updateTaskTC = (todolistId: string, taskId: string, model: UpdateTa
         })
             .then(res => {
                 // ! мы берём ответсвенность что undefined  не  прийдёт
-                dispatch(updateTaskAC(todolistId, taskId, model.status!))
+                dispatch(updateTaskAC(todolistId, taskId, model))
             })
     }
+    console.warn('task not found')
+    return
 }
 
 

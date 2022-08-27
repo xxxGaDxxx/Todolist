@@ -5,7 +5,7 @@ import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from '@mui/material';
 import {Menu} from '@mui/icons-material';
 import {
-    addNewTodolistAC, getTodosTC,
+     createTodosTC, getTodosTC,
     TodoListsDomainType
 } from './state/todolist-reducer';
 import {useDispatch, useSelector} from 'react-redux';
@@ -21,13 +21,14 @@ export function AppWithRedux() {
 
 
     let addNewTodolist = useCallback((title: string) => {
-        let action = addNewTodolistAC(title)
-        dispatch(action)
+        // let action = addNewTodolistAC(title)
+        // dispatch(action)
+        dispatch(createTodosTC(title))
     }, [dispatch])
 
     useEffect(() => {
         dispatch(getTodosTC())
-    },[])
+    }, [])
 
 
     return (

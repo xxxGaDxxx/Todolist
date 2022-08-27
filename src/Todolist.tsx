@@ -3,7 +3,11 @@ import {Button, IconButton} from '@mui/material';
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
 import {Delete} from '@mui/icons-material';
-import {changeFilterAC, editTodolistTitleAC, removeTodolistAC, TodoListsDomainType} from './state/todolist-reducer';
+import {
+    changeFilterAC,
+    deleteTodosTC,
+    TodoListsDomainType, updateTodosTC
+} from './state/todolist-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, AppRootStateType} from './state/store';
 import { createTaskTC, getTaskTC} from './state/tasks-Reducer';
@@ -21,7 +25,6 @@ export const Todolist = memo(({todolist}: PropsType) => {
     const {id, title, filter} = {...todolist}
     let tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
 
-
     const dispatch = useDispatch<AppDispatch>()
 
     let onClickAll = () => dispatch(changeFilterAC(id, 'all'))
@@ -37,8 +40,9 @@ export const Todolist = memo(({todolist}: PropsType) => {
 
 
     let removeTodolistHandler = useCallback(() => {
-        let action = removeTodolistAC(id)
-        dispatch(action)
+        // let action = removeTodolistAC(id)
+        // dispatch(action)
+        dispatch(deleteTodosTC(id))
     }, [dispatch, id])
 
     let addTaskHandler = useCallback((title: string) => {
@@ -47,7 +51,8 @@ export const Todolist = memo(({todolist}: PropsType) => {
     }, [dispatch, id])
 
     let addEditableHandler = useCallback((newTitle: string) => {
-        dispatch(editTodolistTitleAC(id, newTitle))
+        // dispatch(editTodolistTitleAC(id, newTitle))
+        dispatch(updateTodosTC(id,newTitle))
     }, [dispatch, id])
 
     useEffect(() => {
@@ -66,7 +71,7 @@ export const Todolist = memo(({todolist}: PropsType) => {
 
             <ul>
                 {
-                    tasks.map(t => {
+                     tasks.map(t => {
                         return (
                             <Task
                                 key={t.id}

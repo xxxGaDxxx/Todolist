@@ -2,7 +2,7 @@ import React, {ChangeEvent, memo, useCallback} from 'react';
 import {Checkbox, IconButton} from '@mui/material';
 import {EditableSpan} from './components/EditableSpan';
 import {Delete} from '@mui/icons-material';
-import { changeTaskTitleAC, deleteTaskTC, updateTaskTC} from './state/tasks-Reducer';
+import {deleteTaskTC, updateTaskTC} from './state/tasks-Reducer';
 
 import {useDispatch} from 'react-redux';
 import {TaskStatuses, TaskType} from './stories/axios_query/API/todolist_API';
@@ -29,8 +29,8 @@ export const Task = memo(({task, todolistId}: TaskPropsType) => {
         dispatch(updateTaskTC(todolistId, id, {status: newIsDoneValue}))
     }
     let onChangeTitle = useCallback((newTitle: string) => {
-
-        dispatch(changeTaskTitleAC(todolistId, id, newTitle))
+        // dispatch(changeTaskTitleAC(todolistId, id, newTitle))
+        dispatch(updateTaskTC(todolistId, id, {title: newTitle}))
     }, [dispatch, todolistId, id])
 
 
