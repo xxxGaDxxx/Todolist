@@ -1,6 +1,6 @@
 import {
     addTaskAC,
-    changeTaskStatusAC,
+    updateTaskAC,
     changeTaskTitleAC,
     removeTaskAC,
     TaskPropsType,
@@ -60,20 +60,20 @@ test('correct task should be deleted from correct array', () => {
 
 
 test('correct task should be added to correct array', () => {
-    const action = addTaskAC('todolistId2','juce')
+    const action = addTaskAC({id: '123', title: 'WWWWWWWWWW',  status:TaskStatuses.New,description:'', todoListId:'todolistId1', order:0, priority:0,startDate:'', deadline:'', addedDate:''})
 
     const endState = tasksReducer(startState, action)
 
-    expect(endState['todolistId1'].length).toBe(3)
-    expect(endState['todolistId2'].length).toBe(4)
+    expect(endState['todolistId1'].length).toBe(4)
+    expect(endState['todolistId2'].length).toBe(3)
     expect(endState['todolistId2'][0].id).toBeDefined()
-    expect(endState['todolistId2'][0].title).toBe('juce')
+    expect(endState['todolistId1'][0].title).toBe('WWWWWWWWWW')
     expect(endState['todolistId2'][0].status).toBe(0)
 })
 
 
 test('status of specified task should be changed', () => {
-    const action = changeTaskStatusAC('todolistId2', '2', 0)
+    const action = updateTaskAC('todolistId2', '2', 0)
 
     const endState = tasksReducer(startState, action)
 

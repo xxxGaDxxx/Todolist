@@ -9,7 +9,6 @@ const settings = axios.create({
 })
 
 
-
 export type TodolistType = {
     id: string
     title: string
@@ -29,14 +28,6 @@ export type GetTaskResponseType = {
     fieldsErrors: string[]
     totalCount: number
     items: TaskType[]
-}
-export type PostTaskResponseType = {
-    error: string | null
-    fieldsErrors: string[]
-    totalCount: number
-    data: {
-        items: TaskType[]
-    }
 }
 
 export enum TaskStatuses {
@@ -97,9 +88,13 @@ export const todolistAPI = {
         return settings.delete<ResponseType>(`todo-lists/${p.todolistId}/tasks/${p.taskId}`)
     },
     createTask(p: { todolistId: string, title: string }) {
-        return settings.post<PostTaskResponseType>(`todo-lists/${p.todolistId}/tasks`, {title: p.title})
+        return settings.post<ResponseType<{ item: TaskType }>>(`todo-lists/${p.todolistId}/tasks`, {title: p.title})
+            .then(res => {
+                return res
+            })
     },
-    updateTask(p: { todolistId: string, taskId: string, title: string }) {
-        return settings.put<GetTaskResponseType>(`todo-lists/${p.todolistId}/tasks/${p.taskId}`, {title: p.title})
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskType) {
+        return settings.put<GetTaskResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
     },
 }
+

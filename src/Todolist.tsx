@@ -1,12 +1,12 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useEffect} from 'react';
 import {Button, IconButton} from '@mui/material';
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
 import {Delete} from '@mui/icons-material';
 import {changeFilterAC, editTodolistTitleAC, removeTodolistAC, TodoListsDomainType} from './state/todolist-reducer';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './state/store';
-import {addTaskAC} from './state/tasks-Reducer';
+import {AppDispatch, AppRootStateType} from './state/store';
+import { createTaskTC, getTaskTC} from './state/tasks-Reducer';
 import {Task} from './Task';
 import {TaskStatuses, TaskType} from './stories/axios_query/API/todolist_API';
 
@@ -16,19 +16,20 @@ type PropsType = {
 }
 
 export const Todolist = memo(({todolist}: PropsType) => {
-    console.log('Todolist called')
+    // console.log('Todolist called')
 
     const {id, title, filter} = {...todolist}
     let tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
 
-    const dispatch = useDispatch()
+
+    const dispatch = useDispatch<AppDispatch>()
 
     let onClickAll = () => dispatch(changeFilterAC(id, 'all'))
     let onClickActive = () => dispatch(changeFilterAC(id, 'active'))
     let onClickComplited = () => dispatch(changeFilterAC(id, 'completed'))
 
     if (filter === 'active') {
-        tasks = tasks.filter(e => e.status ===TaskStatuses.New)
+        tasks = tasks.filter(e => e.status === TaskStatuses.New)
     }
     if (filter === 'completed') {
         tasks = tasks.filter(e => e.status === TaskStatuses.Completed)
@@ -41,12 +42,17 @@ export const Todolist = memo(({todolist}: PropsType) => {
     }, [dispatch, id])
 
     let addTaskHandler = useCallback((title: string) => {
-        dispatch(addTaskAC(id, title))
+        // dispatch(addTaskAC(id, title))
+        dispatch(createTaskTC(id, title))
     }, [dispatch, id])
 
     let addEditableHandler = useCallback((newTitle: string) => {
         dispatch(editTodolistTitleAC(id, newTitle))
     }, [dispatch, id])
+
+    useEffect(() => {
+        dispatch(getTaskTC(id))
+    },[])
 
     return (
         <div>

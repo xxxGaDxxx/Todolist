@@ -1,26 +1,28 @@
-import {combineReducers, compose, legacy_createStore} from 'redux';
+import {Action, applyMiddleware, combineReducers, legacy_createStore} from 'redux';
 import {tasksReducer} from './tasks-Reducer';
 import {todolistReducer} from './todolist-reducer';
+import thunk, {ThunkAction, ThunkDispatch} from 'redux-thunk';
 
-declare global {
-    interface Window {
-        REDUX_DEVTOOLS_EXTENSION_COMPOSE?: typeof compose;
-    }
-}
-// объединяя reducer-ы с помощью combineReducers,
-// мы задаём структуру нашего единственного объекта-состояния
+
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistReducer
 })
-const composeEnhancers = window.REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
-/*// непосредственно создаём store
-export const store = legacy_createStore(rootReducer, composeEnhancers());*/
-// непосредственно создаём store
-export const store = legacy_createStore(rootReducer,composeEnhancers())
-// определить автоматически тип всего объекта состояния
+
+export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
 export type AppRootStateType = ReturnType<typeof rootReducer>
-// а это, чтобы можно было в консоли браузера обращаться к store в любой момент
+// типизация санки
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, Action>
+//типизация для диспача что бы могли санк криейтор диспатчить
+export type AppDispatch = ThunkDispatch<AppRootStateType, unknown, Action>
+
+
+// export type AppDispatch = typeof store.dispatch
+// export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+// export type RootState = ReturnType<typeof store.getState>
+//
+// export const useAppDispatch: () => AppDispatch = useDispatch
+
 
 // @ts-ignore
 window.store = store

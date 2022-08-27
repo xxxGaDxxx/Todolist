@@ -19,7 +19,6 @@ export const GetTodolists = () => {
         /*  axios.get('https://social-network.samuraijs.com/api/1.1/todo-lists',settings)*/
         todolistAPI.getTodo()
             .then(res => {
-                console.log(res.data)
                 setState(res.data)
             })
     }, [])
@@ -28,10 +27,9 @@ export const GetTodolists = () => {
 export const CreateTodolist = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        const title = 'NEW TODO'
+        const title = 'Todolist 3 '
         todolistAPI.createTodo(title)
             .then(res => {
-                console.log(res.data.data.item)
                 setState(res.data.data.item)
             })
     }, [])
@@ -41,10 +39,9 @@ export const CreateTodolist = () => {
 export const DeleteTodolist = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        const todolistId = '2bb02295-e350-48a0-8d08-a1fe736fd99d'
+        const todolistId = 'db16dcd1-6a53-4946-8978-85c19f5f1a74'
         todolistAPI.deleteTodo(todolistId)
             .then(res => {
-                console.log(res.data)
                 setState(res.data)
             })
     }, [])
@@ -54,11 +51,10 @@ export const DeleteTodolist = () => {
 export const UpdateTodolistTitle = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        const todolistId = 'f079c698-f4e2-4ff6-9bab-5766adca8397'
-        const title = 'TODO 1'
+        const todolistId = '30cada72-0bf6-4e4c-b5d9-a145eb047b19'
+        const title = 'TODO 1111111111111'
         todolistAPI.updateTodo({todolistId, title})
             .then(res => {
-                console.log(res.data)
                 setState(res.data)
             })
     }, [])
@@ -74,7 +70,6 @@ export const GetTask = () => {
     const onClickGet = () => {
         todolistAPI.getTask(todolistId)
             .then(res => {
-                console.log(res.data)
                 setState(res.data.items)
             })
     }
@@ -99,7 +94,6 @@ export const DeleteTask = () => {
     const onClickDelete = () => {
         todolistAPI.deleteTask({todolistId, taskId})
             .then(res => {
-                console.log(res.data)
                 setState(res.data)
             })
     }
@@ -127,8 +121,7 @@ export const CreateTask = () => {
     const onClickCreate = () => {
         todolistAPI.createTask({todolistId, title})
             .then(res => {
-                console.log(res.data.data.items)
-                setState(res.data.data.items)
+                setState(res.data.data.item)
             })
     }
 
@@ -150,18 +143,44 @@ export const UpdateTask = () => {
     const [state, setState] = useState<any>(null)
     const [taskId, setTaskId] = useState<string>('')
     const [todolistId, setTodolistId] = useState<string>('')
-    const [title, setTitle] = useState<string>('')
+    const [title, setTitle] = useState<string>('title 1')
+    const [description, setDescription] = useState<string>('description 1')
+    const [status, setStatus] = useState<number>(0)
+    const [priority, setPriority] = useState<number>(0)
+    const [startDate, setStartDate] = useState<string>('')
+    const [deadline, setDeadline] = useState<string>('')
 
     const onClickUpdate = () => {
-        todolistAPI.updateTask({todolistId, taskId, title})
+        todolistAPI.updateTask(todolistId, taskId, {
+            title: title,
+            deadline: '',
+            description: description,
+            status: status,
+            priority: priority,
+            startDate: '',
+        })
             .then(res => {
-                console.log(res.data)
                 setState(res.data)
             })
     }
 
     return <div>{JSON.stringify(state)}
         <div>
+            <input value={description} placeholder={'description'} onChange={(e) => {
+                setDescription(e.currentTarget.value)
+            }}/>
+            <input value={status} placeholder={'status'} type={'number'} onChange={(e) => {
+                setStatus(Number(e.currentTarget.value))
+            }}/>
+            <input value={priority} placeholder={'priority'} type={'number'} onChange={(e) => {
+                setPriority(Number(e.currentTarget.value))
+            }}/>
+            <input value={startDate} placeholder={'startDate'} onChange={(e) => {
+                setStartDate(e.currentTarget.value)
+            }}/>
+            <input value={deadline} placeholder={'deadline'} onChange={(e) => {
+                setDeadline(e.currentTarget.value)
+            }}/>
             <input value={title} placeholder={'title'} onChange={(e) => {
                 setTitle(e.currentTarget.value)
             }}/>
