@@ -10,8 +10,8 @@ import {
 } from '../reducer-&-test/todolist-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, AppRootStateType} from '../../app/store';
-import { createTaskTC, getTaskTC} from '../reducer-&-test/tasks-Reducer';
-import {Task} from '../TasksList/Task';
+import {createTaskTC, getTaskTC} from '../reducer-&-test/tasks-Reducer';
+import {Task} from './TasksList/Task';
 import {TaskStatuses, TaskType} from '../../api/todolist_API';
 
 
@@ -21,7 +21,7 @@ type PropsType = {
 
 export const Todolist = memo(({todolist}: PropsType) => {
 
-    const {id, title, filter} = {...todolist}
+    const {id, title, filter, entityStatus} = {...todolist}
 
     let tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
     const dispatch = useDispatch<AppDispatch>()
@@ -45,27 +45,27 @@ export const Todolist = memo(({todolist}: PropsType) => {
         dispatch(createTaskTC(id, title))
     }, [dispatch, id])
     const addEditableTitle = useCallback((title: string) => {
-        dispatch(updateTodosTC(id,title))
+        dispatch(updateTodosTC(id, title))
     }, [dispatch, id])
 
 
     useEffect(() => {
         dispatch(getTaskTC(id))
-    },[])
+    }, [])
 
     return (
         <div>
             <h3>
                 <EditableSpan title={title} callBack={addEditableTitle}/>
-                <IconButton onClick={onClickRemoveTodolist}>
+                <IconButton onClick={onClickRemoveTodolist} disabled={entityStatus === 'loading'}>
                     <Delete/>
                 </IconButton>
             </h3>
-            <AddItemForm callBack={addTaskHandler}/>
+            <AddItemForm callBack={addTaskHandler} disabled={entityStatus==='loading'}/>
 
             <ul>
                 {
-                     tasks.map(t => {
+                    tasks.map(t => {
                         return (
                             <Task
                                 key={t.id}

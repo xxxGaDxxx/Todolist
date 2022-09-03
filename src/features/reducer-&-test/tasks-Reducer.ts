@@ -6,6 +6,8 @@ import {
     todolistAPI,
 } from '../../api/todolist_API';
 import {AppRootStateType, AppThunk} from '../../app/store';
+import { setAppStatusAC} from '../../app/app-reducer';
+import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 
 let initialProfileState: TaskPropsType = {}
 
@@ -92,30 +94,57 @@ export const setTaskAC = (tasks: TaskType[], todolistId: string) => {
 
 //thunk
 export const getTaskTC = (todolistId: string): AppThunk => (dispatch) => {
+    dispatch(setAppStatusAC('loading'))
     todolistAPI.getTask(todolistId)
         .then(res => {
-            dispatch(setTaskAC(res.data.items, todolistId))
+            console.log('res',res)
+                dispatch(setTaskAC(res.data.items, todolistId))
+                dispatch(setAppStatusAC('succeeded'))
+        })
+        .catch(err=>{
+            handleServerNetworkError(err.message,dispatch)
         })
 }
 
 export const deleteTaskTC = (todolistId: string, taskId: string): AppThunk =>
     (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         todolistAPI.deleteTask({todolistId, taskId})
             .then(res => {
-                dispatch(removeTaskAC(todolistId, taskId))
+                if(res.data.resultCode===0){
+                    dispatch(removeTaskAC(todolistId, taskId))
+                    dispatch(setAppStatusAC('succeeded'))
+                }else {
+                    handleServerAppError(res.data,dispatch)
+                }
+            })
+            .catch(err=>{
+                handleServerNetworkError(err.message,dispatch)
             })
     }
 
 export const createTaskTC = (todolistId: string, title: string): AppThunk =>
     (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         todolistAPI.createTask({todolistId, title})
             .then(res => {
-                dispatch(addTaskAC(res.data.data.item))
+                if(res.data.resultCode === 0 ){
+                    dispatch(addTaskAC(res.data.data.item))
+                    dispatch(setAppStatusAC('succeeded'))
+                }else {
+                    handleServerAppError(res.data,dispatch)
+                }
+
+            })
+            .catch(err=>{
+                handleServerNetworkError(err.message,dispatch)
             })
     }
 
 export const updateTaskTC = (todolistId: string, taskId: string, model: UpdateTaskModelType): AppThunk =>
     (dispatch, getState: () => AppRootStateType) => {
+
+        dispatch(setAppStatusAC('loading'))
         //достаём таски с getState с нужного тудулиста и при помощи  find  дастаём нужную таску
         const task = getState().tasks[todolistId].find(t => t.id === taskId)
         if (task) {
@@ -130,8 +159,15 @@ export const updateTaskTC = (todolistId: string, taskId: string, model: UpdateTa
                 ...model
             })
                 .then(res => {
-                    // ! мы берём ответсвенность что undefined  не  прийдёт
-                    dispatch(updateTaskAC(todolistId, taskId, model))
+                    if(res.data.resultCode===0){
+                        dispatch(updateTaskAC(todolistId, taskId, model))
+                        dispatch(setAppStatusAC('succeeded'))
+                    }else {
+                        handleServerAppError(res.data,dispatch)
+                    }
+                })
+                .catch(err=>{
+                    handleServerNetworkError(err.message,dispatch)
                 })
         }
         console.warn('task not found')

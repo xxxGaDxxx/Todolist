@@ -4,6 +4,7 @@ import {AddCircle} from '@mui/icons-material';
 
 type AddItemFormPropsType = {
     callBack: (title: string) => void
+    disabled?: boolean
 }
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
@@ -16,7 +17,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
         setTitle(e.currentTarget.value)
     }
     const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if(error) setError(null)
+        if (error) setError(null)
         if (e.key === 'Enter') {
             onClickAddTodoAndTask()
         }
@@ -26,7 +27,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
             props.callBack(title.trim())
             setTitle('')
         } else {
-            setError('Title is reqired')
+            setError('Title is required')
         }
     }
     return (
@@ -39,8 +40,9 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
                 onKeyDown={onKeyDownHandler}
                 error={!!error}
                 helperText={error}
+                disabled={props.disabled}
             />
-            <IconButton onClick={onClickAddTodoAndTask} color={'primary'}>
+            <IconButton onClick={onClickAddTodoAndTask} color={'primary'} disabled={props.disabled}>
                 <AddCircle/>
             </IconButton>
         </div>

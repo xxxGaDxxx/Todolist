@@ -7,9 +7,9 @@ type EditableSpanPropsType = {
 }
 
 export const EditableSpan: React.FC<EditableSpanPropsType> = memo((props) => {
-
     const [edit, setEdit] = useState(false)
     let [newTitle, seNewtTitle] = useState(props.title)
+    console.log('newTitle',newTitle)
 
     let onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         seNewtTitle(e.currentTarget.value)
@@ -20,7 +20,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = memo((props) => {
     }
 
 
-    let EditTrueHandler = () => {
+    let editTrueHandler = () => {
         setEdit(true)
         seNewtTitle(props.title)
     }
@@ -35,7 +35,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = memo((props) => {
                 autoFocus
                 onChange={onChangeHandler}
             />
-            : <span onDoubleClick={EditTrueHandler}>{props.title}</span>
+            : <span onDoubleClick={editTrueHandler}>{props.title}</span>
     );
 });
 

@@ -1,35 +1,27 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import './App.css';
-import {Todolist} from '../features/TodolistsList/Todolist';
-import {AddItemForm} from '../components/AddItemForm/AddItemForm';
-import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from '@mui/material';
-import {Menu} from '@mui/icons-material';
-import {
-     createTodosTC, getTodosTC,
-    TodoListsDomainType
-} from '../features/reducer-&-test/todolist-reducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, AppRootStateType} from './store';
+import AppBar  from '@mui/material/AppBar';
+import  Button from '@mui/material/Button';
+import  IconButton from '@mui/material/IconButton';
+import  Typography from '@mui/material/Typography';
+import  Toolbar from '@mui/material/Toolbar';
+import  Container from '@mui/material/Container';
+import Menu from '@mui/icons-material/Menu';
+import TodolistList from '../features/TodolistList';
+import LinearProgress from '@mui/material/LinearProgress';
+import {useSelector} from 'react-redux';
+import {AppRootStateType} from './store';
+import {RequestStatusType} from './app-reducer';
+import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 
 
 export function AppWithRedux() {
 
-    const todolists = useSelector<AppRootStateType, TodoListsDomainType[]>(state => state.todolists)
-    const dispatch = useDispatch<AppDispatch>()
-
-
-    const addNewTodolist = useCallback((title: string) => {
-        dispatch(createTodosTC(title))
-    }, [dispatch])
-
-
-    useEffect(() => {
-        dispatch(getTodosTC())
-    }, [])
-
+    const status = useSelector<AppRootStateType,RequestStatusType>(state => state.app.status)
 
     return (
         <div className="App">
+            <ErrorSnackbar/>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -40,26 +32,10 @@ export function AppWithRedux() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
+                {status === 'loading' && <LinearProgress color={'secondary'}/>}
             </AppBar>
             <Container fixed>
-                <Grid container style={{padding: '20px'}}>
-                    <AddItemForm callBack={addNewTodolist}/>
-                </Grid>
-                <Grid container spacing={5}>
-                    {
-                        todolists.map((el) => {
-                            return (
-                                <Grid key={el.id} item>
-                                    <Paper style={{padding: '10px'}} elevation={3}>
-                                        <Todolist
-                                            todolist={el}
-                                        />
-                                    </Paper>
-                                </Grid>
-                            )
-                        })
-                    }
-                </Grid>
+                <TodolistList/>
             </Container>
         </div>
     );
