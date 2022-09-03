@@ -15,7 +15,7 @@ type TaskPropsType = {
 
 export const Task = memo(({task, todolistId}: TaskPropsType) => {
 
-    const {id, status, title} = task
+    const {id, status, title, entityStatus} = task
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -34,10 +34,11 @@ export const Task = memo(({task, todolistId}: TaskPropsType) => {
 
     return (
         <div key={id} className={status === TaskStatuses.Completed ? 'is-done' : ''}>
-            <Checkbox color={'error'} checked={status === TaskStatuses.Completed} onChange={onChangeCheckbox}/>
+            <Checkbox color={'error'} checked={status === TaskStatuses.Completed} onChange={onChangeCheckbox}
+                      disabled={entityStatus === 'loading'}/>
             <EditableSpan title={title}
-                          callBack={onChangeTitle}/>
-            <IconButton onClick={onClickDeleteTask}>
+                          callBack={onChangeTitle} disabled={entityStatus === 'loading'}/>
+            <IconButton onClick={onClickDeleteTask} disabled={entityStatus === 'loading'}>
                 <Delete/>
             </IconButton>
         </div>

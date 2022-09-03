@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {RequestStatusType} from '../app/app-reducer';
 
 const settings = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -60,12 +61,14 @@ export type GetTaskResponseType = {
     totalCount: number
     items: TaskType[]
 }
+
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3,
 }
+
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,
@@ -73,6 +76,7 @@ export enum TaskPriorities {
     Urgently = 3,
     Later = 4,
 }
+
 export type TaskType = {
     id: string
     title: string
@@ -84,6 +88,7 @@ export type TaskType = {
     startDate: string
     deadline: string
     addedDate: string
+    entityStatus: RequestStatusType
 }
 export type UpdateTaskType = {
     title: string

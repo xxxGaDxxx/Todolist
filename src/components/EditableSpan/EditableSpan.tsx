@@ -4,12 +4,12 @@ import {TextField} from '@mui/material';
 type EditableSpanPropsType = {
     title: string
     callBack: (title: string) => void
+    disabled?: boolean
 }
 
 export const EditableSpan: React.FC<EditableSpanPropsType> = memo((props) => {
     const [edit, setEdit] = useState(false)
     let [newTitle, seNewtTitle] = useState(props.title)
-    console.log('newTitle',newTitle)
 
     let onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         seNewtTitle(e.currentTarget.value)
@@ -34,6 +34,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = memo((props) => {
                 onBlur={onBlurHandler}
                 autoFocus
                 onChange={onChangeHandler}
+                disabled={props.disabled}
             />
             : <span onDoubleClick={editTrueHandler}>{props.title}</span>
     );

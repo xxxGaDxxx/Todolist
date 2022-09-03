@@ -24,7 +24,8 @@ beforeEach(() => {
                 priority: 0,
                 startDate: '',
                 deadline: '',
-                addedDate: ''
+                addedDate: '',
+                entityStatus:'idle'
             },
             {
                 id: '2',
@@ -36,7 +37,8 @@ beforeEach(() => {
                 priority: 0,
                 startDate: '',
                 deadline: '',
-                addedDate: ''
+                addedDate: '',
+                entityStatus:'idle'
             },
             {
                 id: '3',
@@ -48,7 +50,8 @@ beforeEach(() => {
                 priority: 0,
                 startDate: '',
                 deadline: '',
-                addedDate: ''
+                addedDate: '',
+                entityStatus:'idle'
             }
         ],
         'todolistId2': [
@@ -62,7 +65,8 @@ beforeEach(() => {
                 priority: 0,
                 startDate: '',
                 deadline: '',
-                addedDate: ''
+                addedDate: '',
+                entityStatus:'idle'
             },
             {
                 id: '2',
@@ -74,7 +78,8 @@ beforeEach(() => {
                 priority: 0,
                 startDate: '',
                 deadline: '',
-                addedDate: ''
+                addedDate: '',
+                entityStatus:'idle'
             },
             {
                 id: '3',
@@ -86,7 +91,8 @@ beforeEach(() => {
                 priority: 0,
                 startDate: '',
                 deadline: '',
-                addedDate: ''
+                addedDate: '',
+                entityStatus:'idle'
             }
         ]
     }
@@ -191,7 +197,8 @@ test('correct task should be added to correct array', () => {
         priority: 0,
         startDate: '',
         deadline: '',
-        addedDate: ''
+        addedDate: '',
+        entityStatus:'idle'
     })
 
     const endState = tasksReducer(startState, action)

@@ -3,13 +3,13 @@ import Grid from '@mui/material/Grid';
 import {AddItemForm} from '../components/AddItemForm/AddItemForm';
 import Paper from '@mui/material/Paper';
 import {Todolist} from './TodolistsList/Todolist';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, AppRootStateType} from '../app/store';
-import {createTodosTC, getTodosTC, TodoListsDomainType} from './reducer-&-test/todolist-reducer';
+import {useDispatch} from 'react-redux';
+import {AppDispatch, useAppSelector} from '../app/store';
+import {createTodosTC, getTodosTC} from './reducer-&-test/todolist-reducer';
 
 export const TodolistList = () => {
 
-    const todolists = useSelector<AppRootStateType, TodoListsDomainType[]>(state => state.todolists)
+    const todolists = useAppSelector(state => state.todolists)
     const dispatch = useDispatch<AppDispatch>()
 
 

@@ -3,16 +3,12 @@ import {Button, IconButton} from '@mui/material';
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
 import {EditableSpan} from '../../components/EditableSpan/EditableSpan';
 import {Delete} from '@mui/icons-material';
-import {
-    changeFilterAC,
-    deleteTodosTC,
-    TodoListsDomainType, updateTodosTC
-} from '../reducer-&-test/todolist-reducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, AppRootStateType} from '../../app/store';
+import {changeFilterAC, deleteTodosTC, TodoListsDomainType, updateTodosTC} from '../reducer-&-test/todolist-reducer';
+import {useDispatch} from 'react-redux';
+import {AppDispatch, useAppSelector} from '../../app/store';
 import {createTaskTC, getTaskTC} from '../reducer-&-test/tasks-Reducer';
 import {Task} from './TasksList/Task';
-import {TaskStatuses, TaskType} from '../../api/todolist_API';
+import {TaskStatuses} from '../../api/todolist_API';
 
 
 type PropsType = {
@@ -23,7 +19,7 @@ export const Todolist = memo(({todolist}: PropsType) => {
 
     const {id, title, filter, entityStatus} = {...todolist}
 
-    let tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
+    let tasks = useAppSelector(state => state.tasks[id])
     const dispatch = useDispatch<AppDispatch>()
 
     const onClickAll = () => dispatch(changeFilterAC(id, 'all'))
@@ -51,7 +47,7 @@ export const Todolist = memo(({todolist}: PropsType) => {
 
     useEffect(() => {
         dispatch(getTaskTC(id))
-    }, [])
+    },[])
 
     return (
         <div>
@@ -61,7 +57,7 @@ export const Todolist = memo(({todolist}: PropsType) => {
                     <Delete/>
                 </IconButton>
             </h3>
-            <AddItemForm callBack={addTaskHandler} disabled={entityStatus==='loading'}/>
+            <AddItemForm callBack={addTaskHandler} disabled={entityStatus === 'loading'}/>
 
             <ul>
                 {

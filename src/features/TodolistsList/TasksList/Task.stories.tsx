@@ -1,11 +1,8 @@
 import React from 'react';
-import {ComponentStory, ComponentMeta} from '@storybook/react';
+import {ComponentMeta, ComponentStory} from '@storybook/react';
 import {Task} from './Task';
 import {ReduxStoreProviderDecorator} from '../../../stories/ReduxStoreProviderDecorator';
-import {useSelector} from 'react-redux';
-import {AppRootStateType} from '../../../app/store';
-import {TaskType} from '../../../api/todolist_API';
-
+import {useAppSelector} from '../../../app/store';
 
 
 export default {
@@ -17,7 +14,7 @@ export default {
 
 
 const UsingReduxComponent = () => {
-    const task = useSelector<AppRootStateType, TaskType>(state => state.tasks['todolistId2'][1])
+    const task = useAppSelector(state => state.tasks['todolistId2'][1])
 
     return <Task
         task={task}

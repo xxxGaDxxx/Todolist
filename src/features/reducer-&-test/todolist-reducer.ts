@@ -76,8 +76,8 @@ export const getTodosTC = (): AppThunk => (dispatch) => {
             dispatch(setTodosAC(res.data))
             dispatch(setAppStatusAC('succeeded'))
         })
-        .catch(err=>{
-            handleServerNetworkError(err.message,dispatch)
+        .catch(err => {
+            handleServerNetworkError(err.message, dispatch)
         })
 }
 
@@ -90,11 +90,11 @@ export const deleteTodosTC = (todolistId: string): AppThunk => (dispatch) => {
                 dispatch(deleteTodolistAC(todolistId))
                 dispatch(setAppStatusAC('succeeded'))
             } else {
-                handleServerAppError(res.data,dispatch)
+                handleServerAppError(res.data, dispatch)
             }
         })
-        .catch(err=>{
-            handleServerNetworkError(err.message,dispatch)
+        .catch(err => {
+            handleServerNetworkError(err.message, dispatch)
         })
 }
 
@@ -106,12 +106,11 @@ export const createTodosTC = (title: string): AppThunk => (dispatch) => {
                 dispatch(addTodolistAC(res.data.data.item))
                 dispatch(setAppStatusAC('succeeded'))
             } else {
-                handleServerAppError(res.data,dispatch)
+                handleServerAppError(res.data, dispatch)
             }
-
         })
-        .catch(err=>{
-            handleServerNetworkError(err.message,dispatch)
+        .catch(err => {
+            handleServerNetworkError(err.message, dispatch)
         })
 }
 
@@ -119,15 +118,15 @@ export const updateTodosTC = (todolistId: string, title: string): AppThunk => (d
     dispatch(setAppStatusAC('loading'))
     todolistAPI.updateTodo({todolistId, title})
         .then(res => {
-            if(res.data.resultCode===0){
+            if (res.data.resultCode === 0) {
                 dispatch(newTitleTodolistAC(todolistId, title))
                 dispatch(setAppStatusAC('succeeded'))
-            }else {
-                handleServerAppError(res.data,dispatch)
+            } else {
+                handleServerAppError(res.data, dispatch)
             }
         })
-        .catch(err=>{
-            handleServerNetworkError(err.message,dispatch)
+        .catch(err => {
+            handleServerNetworkError(err.message, dispatch)
         })
 }
 
