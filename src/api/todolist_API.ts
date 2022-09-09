@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {RequestStatusType} from '../app/app-reducer';
 
 const settings = axios.create({
@@ -10,6 +10,19 @@ const settings = axios.create({
 })
 
 // api
+export const authAPI = {
+    login(data: LoginParamsType) {
+        return settings.post<LoginParamsType,AxiosResponse<ResponseType<{userId:string}>>>('auth/login', data)
+    },
+    me(){
+        return settings.get<ResponseType<{id:string,email:string,login:string}>>('auth/me')
+    },
+    logout(){
+      return settings.delete<ResponseType>('auth/login')
+    },
+}
+
+
 export const todolistAPI = {
     getTodo() {
         return settings.get<TodolistType[]>('todo-lists')
@@ -42,6 +55,13 @@ export const todolistAPI = {
 
 
 //types
+
+export type LoginParamsType = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?: string
+}
 
 export type TodolistType = {
     id: string

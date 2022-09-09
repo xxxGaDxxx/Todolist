@@ -6,9 +6,10 @@ import {Todolist} from './TodolistsList/Todolist';
 import {useDispatch} from 'react-redux';
 import {AppDispatch, useAppSelector} from '../app/store';
 import {createTodosTC, getTodosTC} from './reducer-&-test/todolist-reducer';
+import {Navigate} from 'react-router-dom';
 
 export const TodolistList = () => {
-
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
     const todolists = useAppSelector(state => state.todolists)
     const dispatch = useDispatch<AppDispatch>()
 
@@ -17,12 +18,16 @@ export const TodolistList = () => {
         dispatch(createTodosTC(title))
     }, [dispatch])
 
-
     useEffect(() => {
+        if (!isLoggedIn) {
+            return
+        }
         dispatch(getTodosTC())
     }, [])
 
-
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
     return (
         <>
             <Grid container style={{padding: '20px'}}>

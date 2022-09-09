@@ -16,7 +16,6 @@ type PropsType = {
 }
 
 export const Todolist = memo(({todolist}: PropsType) => {
-
     const {id, title, filter, entityStatus} = {...todolist}
 
     let tasks = useAppSelector(state => state.tasks[id])
@@ -47,7 +46,8 @@ export const Todolist = memo(({todolist}: PropsType) => {
 
     useEffect(() => {
         dispatch(getTaskTC(id))
-    },[])
+    }, [])
+
 
     return (
         <div>
