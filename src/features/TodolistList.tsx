@@ -13,7 +13,6 @@ export const TodolistList = () => {
     const todolists = useAppSelector(state => state.todolists)
     const dispatch = useDispatch<AppDispatch>()
 
-
     const addNewTodolist = useCallback((title: string) => {
         dispatch(createTodosTC(title))
     }, [dispatch])
@@ -23,11 +22,13 @@ export const TodolistList = () => {
             return
         }
         dispatch(getTodosTC())
-    }, [])
+    }, [dispatch])
+    console.log(isLoggedIn)
 
     if (!isLoggedIn) {
         return <Navigate to={'/login'}/>
     }
+
     return (
         <>
             <Grid container style={{padding: '20px'}}>

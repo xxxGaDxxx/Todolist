@@ -26,6 +26,7 @@ export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<ActionsTyp
     dispatch(setAppStatusAC('loading'))
     authAPI.login(data)
         .then(res => {
+
             if (res.data.resultCode === 0) {
                 dispatch(setIsLoggedInAC(true))
                 dispatch(setAppStatusAC('succeeded'))
@@ -42,6 +43,7 @@ export const logoutTC = (): AppThunk => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC('loading'))
     authAPI.logout()
         .then(res => {
+
             if (res.data.resultCode === 0) {
                 dispatch(setIsLoggedInAC(false))
                 dispatch(setAppStatusAC('succeeded'))
