@@ -23,7 +23,7 @@ export const TodolistList = () => {
         }
         dispatch(getTodosTC())
     }, [dispatch])
-    console.log(isLoggedIn)
+
 
     if (!isLoggedIn) {
         return <Navigate to={'/login'}/>
