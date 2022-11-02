@@ -21,9 +21,9 @@ export const Todolist = memo(({todolist}: PropsType) => {
     let tasks = useAppSelector(state => state.tasks[id])
     const dispatch = useDispatch<AppDispatch>()
 
-    const onClickAll = () => dispatch(changeFilterAC(id, 'all'))
-    const onClickActive = () => dispatch(changeFilterAC(id, 'active'))
-    const onClickComplited = () => dispatch(changeFilterAC(id, 'completed'))
+    const onClickAll = () => dispatch(changeFilterAC({todolistId: id, newFilter: 'all'}))
+    const onClickActive = () => dispatch(changeFilterAC({todolistId: id, newFilter: 'active'}))
+    const onClickComplited = () => dispatch(changeFilterAC({todolistId: id, newFilter: 'completed'}))
 
     if (filter === 'active') {
         tasks = tasks.filter(e => e.status === TaskStatuses.New)
@@ -46,7 +46,7 @@ export const Todolist = memo(({todolist}: PropsType) => {
 
     useEffect(() => {
         dispatch(getTaskTC(id))
-    }, [])
+    }, [dispatch])
 
 
     return (

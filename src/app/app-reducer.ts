@@ -6,6 +6,7 @@ import {AppThunk} from './store';
 import {setIsLoggedInAC} from '../features/Login/auth-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
 import axios from 'axios';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -15,47 +16,70 @@ const initialState = {
     isInitialized: false
 }
 
-type InitialStateType = typeof initialState
+// type InitialStateType = typeof initialState
+//
+// export const _appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
+//     switch (action.type) {
+//         case 'APP/SET-STATUS':
+//             return {...state, status: action.status}
+//         case 'APP/SET-ERROR':
+//             return {...state, error: action.error}
+//         case 'APP/SET-INITIALIZED':
+//             return {...state, isInitialized: action.value}
+//         default:
+//             return state
+//     }
+// }
 
-export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-    switch (action.type) {
-        case 'APP/SET-STATUS':
-            return {...state, status: action.status}
-        case 'APP/SET-ERROR':
-            return {...state, error: action.error}
-        case 'APP/SET-INITIALIZED':
-            return {...state, isInitialized: action.value}
-        default:
-            return state
+const slice = createSlice({
+    name: 'app',
+    initialState: initialState,
+    reducers: {
+        setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
+            state.status = action.payload.status
+        },
+        setAppErrorAC(state, action: PayloadAction<{ error: string | null }>) {
+            state.error = action.payload.error
+        },
+        setIsInitializedAC(state, action: PayloadAction<{ value: boolean }>) {
+            state.isInitialized = action.payload.value
+        },
     }
-}
+})
+export const appReducer = slice.reducer
+export const {
+    setAppStatusAC,
+    setAppErrorAC,
+    setIsInitializedAC
+} = slice.actions
 
-export const setAppStatusAC = (status: RequestStatusType) => {
-    return {
-        type: 'APP/SET-STATUS',
-        status,
-    } as const
-}
 
-export const setAppErrorAC = (error: string | null) => {
-    return {
-        type: 'APP/SET-ERROR',
-        error
-    } as const
-}
-export const setIsInitializedAC = (value: boolean) => {
-    return {
-        type: 'APP/SET-INITIALIZED',
-        value
-    } as const
-}
+// export const setAppStatusAC = (status: RequestStatusType) => {
+//     return {
+//         type: 'APP/SET-STATUS',
+//         status,
+//     } as const
+// }
+//
+// export const setAppErrorAC = (error: string | null) => {
+//     return {
+//         type: 'APP/SET-ERROR',
+//         error
+//     } as const
+// }
+// export const setIsInitializedAC = (value: boolean) => {
+//     return {
+//         type: 'APP/SET-INITIALIZED',
+//         value
+//     } as const
+// }
 
 export const initializeAppTC = (): AppThunk => (dispatch) => {
     authAPI.me().then(res => {
 
         if (res.data.resultCode === 0) {
 
-            dispatch(setIsLoggedInAC(true));
+            dispatch(setIsLoggedInAC({value: true}));
 
         } else {
             handleServerAppError(res.data, dispatch)
@@ -68,16 +92,20 @@ export const initializeAppTC = (): AppThunk => (dispatch) => {
     })
         .finally(() => {
 
-            dispatch(setIsInitializedAC(true))
+            dispatch(setIsInitializedAC({value: true}))
         })
 
 }
 
+
+// для error-utils
 export type SetAppStatusACType = ReturnType<typeof setAppStatusAC>
 export type SetAppErrorACType = ReturnType<typeof setAppErrorAC>
-export type SetIsInitializedACType = ReturnType<typeof setIsInitializedAC>
 
-type ActionsType =
-    | SetAppStatusACType
-    | SetAppErrorACType
-    | SetIsInitializedACType
+
+// export type SetIsInitializedACType = ReturnType<typeof setIsInitializedAC>
+
+// type ActionsType =
+//     | SetAppStatusACType
+//     | SetAppErrorACType
+//     | SetIsInitializedACType

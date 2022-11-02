@@ -11,7 +11,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export const ErrorSnackbar=()=> {
+export const ErrorSnackbar = () => {
 
     const error = useAppSelector(state => state.app.error)
     const dispatch = useDispatch()
@@ -20,14 +20,14 @@ export const ErrorSnackbar=()=> {
         if (reason === 'clickaway') {
             return;
         }
-        dispatch(setAppErrorAC(null))
+        dispatch(setAppErrorAC({error: null}))
     };
 
     return (
-            <Snackbar open={!!error} autoHideDuration={3000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-                    {error}
-                </Alert>
-            </Snackbar>
+        <Snackbar open={!!error} autoHideDuration={3000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
+                {error}
+            </Alert>
+        </Snackbar>
     );
 }
