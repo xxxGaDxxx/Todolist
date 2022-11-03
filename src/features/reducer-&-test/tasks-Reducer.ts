@@ -1,10 +1,4 @@
-import {
-    addTodolistAC,
-    AddTodolistACType,
-    deleteTodolistAC,
-    RemoveTodolistACType, setTodosAC,
-    SetTodosACType
-} from './todolist-reducer';
+import {addTodolistAC, deleteTodolistAC, setTodosAC} from './todolist-reducer';
 import {TaskPriorities, TaskStatuses, TaskType, todolistAPI,} from '../../api/todolist_API';
 import {AppRootStateType, AppThunk} from '../../app/store';
 import {RequestStatusType, setAppStatusAC} from '../../app/app-reducer';
@@ -67,8 +61,8 @@ const slice = createSlice({
                 tasks.splice(index, 1)
             }
         },
-        addTaskAC(state, action: PayloadAction<{ task: TaskType }>) {
-            state[action.payload.task.todoListId].unshift({...action.payload.task})
+        addTaskAC(state, action: PayloadAction<TaskType>) {
+            state[action.payload.todoListId].unshift({...action.payload})
         },
         updateTaskAC(state, action: PayloadAction<{ todolistId: string, taskId: string, model: UpdateTaskModelType }>) {
             const tasks = state[action.payload.todolistId]
@@ -103,7 +97,7 @@ const slice = createSlice({
 })
 
 export const tasksReducer = slice.reducer
-const {
+export const {
     removeTaskAC,
     addTaskAC,
     updateTaskAC,
@@ -193,7 +187,7 @@ export const createTaskTC = (todolistId: string, title: string): AppThunk =>
         todolistAPI.createTask({todolistId, title})
             .then(res => {
                 if (res.data.resultCode === 0) {
-                    dispatch(addTaskAC({task: res.data.data.item}))
+                    dispatch(addTaskAC(res.data.data.item))
                     dispatch(setAppStatusAC({status: 'succeeded'}))
                 } else {
                     handleServerAppError(res.data, dispatch)
@@ -254,19 +248,19 @@ export type TaskPropsType = {
     [key: string]: TaskType[]
 }
 
-type TaskReducerType =
-    | RemoveTaskACType
-    | AddTaskACType
-    | UpdateTaskACType
-    | SetTaskType
-    | AddTodolistACType
-    | RemoveTodolistACType
-    | SetTodosACType
-    | changeTaskEntityStatusACType
+// type TaskReducerType =
+//     | RemoveTaskACType
+//     | AddTaskACType
+//     | UpdateTaskACType
+//     | SetTaskType
+//     | AddTodolistACType
+//     | RemoveTodolistACType
+//     | SetTodosACType
+//     | changeTaskEntityStatusACType
 
 
-type RemoveTaskACType = ReturnType<typeof removeTaskAC>
-type AddTaskACType = ReturnType<typeof addTaskAC>
-type UpdateTaskACType = ReturnType<typeof updateTaskAC>
-type SetTaskType = ReturnType<typeof setTaskAC>
-type changeTaskEntityStatusACType = ReturnType<typeof changeTaskEntityStatusAC>
+// type RemoveTaskACType = ReturnType<typeof removeTaskAC>
+// type AddTaskACType = ReturnType<typeof addTaskAC>
+// type UpdateTaskACType = ReturnType<typeof updateTaskAC>
+// type SetTaskType = ReturnType<typeof setTaskAC>
+// type changeTaskEntityStatusACType = ReturnType<typeof changeTaskEntityStatusAC>
