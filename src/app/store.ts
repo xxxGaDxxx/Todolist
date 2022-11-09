@@ -3,7 +3,7 @@ import {tasksReducer} from '../features/reducer-&-test/tasks-Reducer';
 import {todolistReducer} from '../features/reducer-&-test/todolist-reducer';
 import thunk, {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {appReducer} from './app-reducer';
-import {TypedUseSelectorHook, useSelector} from 'react-redux';
+import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {authReducer} from '../features/Login/auth-reducer';
 import {configureStore} from '@reduxjs/toolkit';
 
@@ -38,7 +38,7 @@ export const useAppSelector: TypedUseSelectorHook<AppRootStateType> = useSelecto
 // export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 // export type RootState = ReturnType<typeof store.getState>
 //
-// export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppDispatch = () => useDispatch<AppDispatch>()
 
 
 // @ts-ignore

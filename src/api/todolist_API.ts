@@ -12,13 +12,13 @@ const settings = axios.create({
 // api
 export const authAPI = {
     login(data: LoginParamsType) {
-        return settings.post<LoginParamsType,AxiosResponse<ResponseType<{userId:string}>>>('auth/login', data)
+        return settings.post<LoginParamsType, AxiosResponse<ResponseType<{ userId: string }>>>('auth/login', data)
     },
-    me(){
-        return settings.get<ResponseType<{id:string,email:string,login:string}>>('auth/me')
+    me() {
+        return settings.get<ResponseType<{ id: string, email: string, login: string }>>('auth/me')
     },
-    logout(){
-      return settings.delete<ResponseType>('auth/login')
+    logout() {
+        return settings.delete<ResponseType>('auth/login')
     },
 }
 
@@ -69,9 +69,15 @@ export type TodolistType = {
     addedDate: string
     order: number
 }
+
+export type FieldsErrorsType = {
+    field: string
+    message: string
+}
+
 export type ResponseType<D = {}> = {
     messages: string[]
-    fieldsErrors: string[]
+    fieldsErrors: FieldsErrorsType[]
     resultCode: number
     data: D
 }

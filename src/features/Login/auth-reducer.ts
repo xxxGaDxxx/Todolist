@@ -1,31 +1,51 @@
 import {setAppStatusAC} from '../../app/app-reducer'
 import {AppThunk} from '../../app/store';
-import {authAPI, LoginParamsType} from '../../api/todolist_API';
+import {authAPI, FieldsErrorsType, LoginParamsType} from '../../api/todolist_API';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {Dispatch} from 'redux';
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const initialState = {
     isLoggedIn: false
 }
-// type InitialStateType = typeof initialState
 
-// export const _authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-//     switch (action.type) {
-//         case 'login/SET-IS-LOGGED-IN':
-//             return {...state, isLoggedIn: action.value}
-//         default:
-//             return state
-//     }
-// }
+export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType, { rejectValue: { errors: string[], fieldsErrors?: FieldsErrorsType[] } }>('auth/login', async (param, thunkAPI) => {
+    thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
+    try {
+        const {data} = await authAPI.login(param)
+
+        if (data.resultCode === 0) {
+            // thunkAPI.dispatch(setIsLoggedInAC({value: true}))
+            thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+            return {isLoggedIn: true}
+        } else {
+            handleServerAppError(data, thunkAPI.dispatch)
+            return thunkAPI.rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors})
+        }
+
+    } catch (err) {
+        if (axios.isAxiosError(err)) {
+            handleServerNetworkError(err.message, thunkAPI.dispatch)
+            return thunkAPI.rejectWithValue({errors: [err.message], fieldsErrors: undefined})
+        }
+        return thunkAPI.rejectWithValue({errors: ['Error'], fieldsErrors: undefined})
+    }
+})
+
 
 const slice = createSlice({
     name: 'auth',
     initialState: initialState,
     reducers: {
-        setIsLoggedInAC(state, action: PayloadAction<{ value: boolean }>) {
-            state.isLoggedIn = action.payload.value
+        setIsLoggedInAC(state, action: PayloadAction<{ isLoggedIn: boolean }>) {
+            state.isLoggedIn = action.payload.isLoggedIn
         }
+    },
+    extraReducers: builder => {
+        builder.addCase(loginTC.fulfilled, (state, action) => {
+            state.isLoggedIn = action.payload.isLoggedIn
+        })
     }
 })
 
@@ -38,22 +58,22 @@ export const {setIsLoggedInAC} = slice.actions
 //     ({type: 'login/SET-IS-LOGGED-IN', value} as const)
 
 // thunks
-export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC({status: 'loading'}))
-    authAPI.login(data)
-        .then(res => {
-
-            if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC({value: true}))
-                dispatch(setAppStatusAC({status: 'succeeded'}))
-            } else {
-                handleServerAppError(res.data, dispatch)
-            }
-        })
-        .catch(err => {
-            handleServerNetworkError(err.message, dispatch)
-        })
-}
+// export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch) => {
+//     dispatch(setAppStatusAC({status: 'loading'}))
+//     authAPI.login(data)
+//         .then(res => {
+//
+//             if (res.data.resultCode === 0) {
+//                 dispatch(setIsLoggedInAC({value: true}))
+//                 dispatch(setAppStatusAC({status: 'succeeded'}))
+//             } else {
+//                 handleServerAppError(res.data, dispatch)
+//             }
+//         })
+//         .catch(err => {
+//             handleServerNetworkError(err.message, dispatch)
+//         })
+// }
 
 export const logoutTC = (): AppThunk => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC({status: 'loading'}))
@@ -61,7 +81,7 @@ export const logoutTC = (): AppThunk => (dispatch: Dispatch) => {
         .then(res => {
 
             if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC({value: false}))
+                dispatch(setIsLoggedInAC({isLoggedIn: false}))
                 dispatch(setAppStatusAC({status: 'succeeded'}))
             } else {
                 handleServerAppError(res.data, dispatch)

@@ -20,16 +20,16 @@ export const Task = memo(({task, todolistId}: TaskPropsType) => {
     const dispatch = useDispatch<AppDispatch>()
 
     const onClickDeleteTask = () => {
-        dispatch(deleteTaskTC(todolistId, id))
+        dispatch(deleteTaskTC({todolistId, taskId: id}))
     }
     const onChangeCheckbox = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const newIsDoneValue: TaskStatuses = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
         dispatch(updateTaskTC(todolistId, id, {status: newIsDoneValue}))
-    }, [todolistId, id])
+    }, [dispatch, todolistId, id])
 
     const onChangeTitle = useCallback((title: string) => {
         dispatch(updateTaskTC(todolistId, id, {title: title}))
-    }, [todolistId, id])
+    }, [dispatch, todolistId, id])
 
 
     return (
