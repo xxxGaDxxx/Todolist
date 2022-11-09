@@ -31,10 +31,10 @@ export const TodolistList = () => {
 
     return (
         <>
-            <Grid container style={{padding: '20px'}}>
+            <Grid container justifyContent={'center'} style={{padding: '20px'}}>
                 <AddItemForm callBack={addNewTodolist}></AddItemForm>
             </Grid>
-            <Grid container spacing={5}>
+            <Grid container justifyContent={'center'} spacing={5}>
                 {
                     todolists.map((el) => {
                         return (

@@ -51,7 +51,7 @@ export const Todolist = memo(({todolist}: PropsType) => {
 
     return (
         <div>
-            <h3>
+            <h3 style={{textAlign:'center'}}>
                 <EditableSpan title={title} callBack={addEditableTitle}/>
                 <IconButton onClick={onClickRemoveTodolist} disabled={entityStatus === 'loading'}>
                     <Delete/>
@@ -76,9 +76,9 @@ export const Todolist = memo(({todolist}: PropsType) => {
             <div>
                 <Button color={'primary'} variant={filter === 'all' ? 'contained' : 'outlined'}
                         onClick={onClickAll}>All</Button>
-                <Button color={'success'} variant={filter === 'active' ? 'contained' : 'outlined'}
+                <Button color={'primary'} variant={filter === 'active' ? 'contained' : 'outlined'}
                         onClick={onClickActive}>Active</Button>
-                <Button color={'error'} variant={filter === 'completed' ? 'contained' : 'outlined'}
+                <Button color={'primary'} variant={filter === 'completed' ? 'contained' : 'outlined'}
                         onClick={onClickComplited}>Complited
                 </Button>
             </div>

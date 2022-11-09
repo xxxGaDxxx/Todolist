@@ -32,15 +32,17 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
     }
     return (
         <div>
-            <TextField
-                variant="outlined"
-                label="Type value"
-                value={title}
-                onChange={onChangeValueInput}
-                onKeyDown={onKeyDownHandler}
-                error={!!error}
-                helperText={error}
-                disabled={props.disabled}
+            <TextField style={{textAlign: 'center'}}
+                       variant={'outlined'}
+                       size={'small'}
+                       label={'enter item title'}
+                       helperText={error && 'Error! Typing is expected'}
+                       value={title}
+                       onChange={onChangeValueInput}
+                       onKeyDown={onKeyDownHandler}
+                       error={!!error}
+                       disabled={props.disabled}
+
             />
             <IconButton onClick={onClickAddTodoAndTask} color={'primary'} disabled={props.disabled}>
                 <AddCircle/>
