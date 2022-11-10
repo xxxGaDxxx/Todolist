@@ -9,38 +9,39 @@ import {TaskStatuses, TaskType} from '../../../api/todolist_API';
 import {AppDispatch} from '../../../app/store';
 
 type TaskPropsType = {
-    task: TaskType
-    todolistId: string
+  task: TaskType
+  todolistId: string
 }
 
 export const Task = memo(({task, todolistId}: TaskPropsType) => {
 
-    const {id, status, title, entityStatus} = task
+  const {id, status, title, entityStatus} = task
 
-    const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>()
 
-    const onClickDeleteTask = () => {
-        dispatch(deleteTaskTC({todolistId, taskId: id}))
-    }
-    const onChangeCheckbox = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const newIsDoneValue: TaskStatuses = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
-        dispatch(updateTaskTC(todolistId, id, {status: newIsDoneValue}))
-    }, [dispatch, todolistId, id])
+  const onClickDeleteTask = () => {
+    dispatch(deleteTaskTC({todolistId, taskId: id}))
+  }
+  const onChangeCheckbox = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const status: TaskStatuses = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
+    dispatch(updateTaskTC({todolistId, taskId: id, model: {status}}))
+  }, [dispatch, todolistId, id])
 
-    const onChangeTitle = useCallback((title: string) => {
-        dispatch(updateTaskTC(todolistId, id, {title: title}))
-    }, [dispatch, todolistId, id])
+  const onChangeTitle = useCallback((title: string) => {
+    dispatch(updateTaskTC({todolistId, taskId: id, model: {title}}))
+  }, [dispatch, todolistId, id])
 
 
-    return (
-        <div key={id} className={status === TaskStatuses.Completed ? 'is-done' : ''}>
-            <Checkbox color={'error'} checked={status === TaskStatuses.Completed} onChange={onChangeCheckbox}
-                      disabled={entityStatus === 'loading'}/>
-            <EditableSpan title={title}
-                          callBack={onChangeTitle} disabled={entityStatus === 'loading'}/>
-            <IconButton onClick={onClickDeleteTask} disabled={entityStatus === 'loading'}>
-                <Delete/>
-            </IconButton>
-        </div>
-    )
+  return (
+    <div key={id} className={status === TaskStatuses.Completed ? 'is-done' : ''}>
+      <Checkbox color={'error'} checked={status === TaskStatuses.Completed}
+                onChange={onChangeCheckbox}
+                disabled={entityStatus === 'loading'}/>
+      <EditableSpan title={title}
+                    callBack={onChangeTitle} disabled={entityStatus === 'loading'}/>
+      <IconButton onClick={onClickDeleteTask} disabled={entityStatus === 'loading'}>
+        <Delete/>
+      </IconButton>
+    </div>
+  )
 })
