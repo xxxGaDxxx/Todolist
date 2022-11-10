@@ -39,13 +39,13 @@ export const Todolist = memo(({todolist}: PropsType) => {
 
 
   const onClickRemoveTodolist = useCallback(() => {
-    dispatch(deleteTodosTC(id))
+    dispatch(deleteTodosTC({todolistId: id}))
   }, [dispatch, id])
   const addTaskHandler = useCallback((title: string) => {
     dispatch(addTaskTC({todolistId: id, title}))
   }, [dispatch, id])
   const addEditableTitle = useCallback((title: string) => {
-    dispatch(updateTodosTC(id, title))
+    dispatch(updateTodosTC({todolistId:id, title}))
   }, [dispatch, id])
 
 
