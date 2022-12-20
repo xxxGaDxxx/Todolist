@@ -5,13 +5,13 @@ https://xxxgadxxx.github.io/Todolist
 
 ---
 
-Technologies:
-React
-TypeScript
-Redux Toolkit
-React-Redux
-React-Router-Dom
-Redux-Thunk
-Axios
-Formik
-Material-UI
+- Technologies:
+- React
+- TypeScript
+- Redux Toolkit
+- React-Redux
+- React-Router-Dom
+- Redux-Thunk
+- Axios
+- Formik
+- Material-UI
